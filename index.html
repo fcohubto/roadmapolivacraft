@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivacraft — Roadmap Absoluto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:          #1C1C1A;
+    --ink-soft:     #4A4A44;
+    --ink-muted:    #8A8A82;
+    --bg:           #FAFAF7;
+    --surface:      #F4F1EB;
+    --cream:        #EDE8DF;
+    --border:       rgba(28,28,26,0.12);
+    --border-mid:   rgba(28,28,26,0.22);
+    --accent:       #2A2A26;
+    --accent-soft:  #E8E4DC;
+    --gold:         #B89A52;
+    --gold-soft:    #F0E6CA;
+    --critical:     #C0392B;
+    --critical-soft:#FAECEB;
+    --action:       #2D5016;
+    --action-soft:  #E6EDD9;
+    --build:        #7A5C1E;
+    --build-soft:   #F5EDD4;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* ── HEADER ── */
+  .rm-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-mid);
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .rm-wordmark {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .rm-wordmark em {
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  .rm-meta {
+    text-align: right;
+  }
+
+  .rm-meta p {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  /* ── CONTEXT CALLOUT ── */
+  .context-callout {
+    background: var(--gold-soft);
+    border: 0.5px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 2rem;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .context-callout strong { color: var(--ink); font-weight: 500; }
+
+  /* ── TIMELINE STRIP ── */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border: 0.5px solid var(--border-mid);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .tl-phase {
+    padding: 12px 10px;
+    text-align: center;
+    border-right: 0.5px solid var(--border);
+  }
+
+  .tl-phase:last-child { border-right: none; }
+
+  .tl-phase.now   { background: var(--accent); }
+  .tl-phase.near  { background: var(--accent-soft); }
+  .tl-phase.mid   { background: var(--surface); }
+  .tl-phase.later { background: var(--cream); }
+
+  .tl-num {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .tl-phase.now .tl-num   { color: rgba(255,255,255,0.55); }
+  .tl-phase:not(.now) .tl-num { color: var(--ink-muted); }
+
+  .tl-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .tl-phase.now .tl-name  { color: #fff; }
+  .tl-phase.near .tl-name { color: var(--accent); }
+  .tl-phase:not(.now):not(.near) .tl-name { color: var(--ink-soft); }
+
+  .tl-time {
+    font-size: 10px;
+    margin-top: 3px;
+    color: var(--ink-muted);
+  }
+
+  .tl-phase.now .tl-time { color: rgba(255,255,255,0.5); }
+
+  /* ── PHASE BLOCK ── */
+  .phase {
+    margin-bottom: 1.25rem;
+    border: 0.5px solid var(--border-mid);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .phase.phase-now { border-color: var(--accent); }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface);
+    transition: background 0.15s;
+  }
+
+  .phase-now .phase-header {
+    background: var(--accent);
+  }
+
+  .phase-header:hover { filter: brightness(0.97); }
+
+  .ph-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .phase-now .ph-num   { background: rgba(255,255,255,0.18); color: #fff; }
+  .phase:not(.phase-now) .ph-num { background: var(--cream); color: var(--ink); }
+
+  .ph-info { flex: 1; }
+
+  .ph-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .phase-now .ph-label    { color: rgba(255,255,255,0.55); }
+  .phase:not(.phase-now) .ph-label { color: var(--ink-muted); }
+
+  .ph-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  .phase-now .ph-title    { color: #fff; }
+  .phase:not(.phase-now) .ph-title { color: var(--ink); }
+
+  .ph-time {
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .phase-now .ph-time     { color: rgba(255,255,255,0.55); }
+  .phase:not(.phase-now) .ph-time { color: var(--ink-muted); }
+
+  .ph-toggle {
+    font-size: 11px;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  .phase-now .ph-toggle   { color: rgba(255,255,255,0.55); }
+  .phase:not(.phase-now) .ph-toggle { color: var(--ink-muted); }
+
+  .phase.closed .ph-toggle { transform: rotate(-90deg); }
+
+  /* ── PHASE BODY ── */
+  .phase-body {
+    background: #fff;
+    overflow: hidden;
+    max-height: 3000px;
+    transition: max-height 0.4s ease;
+  }
+
+  .phase.closed .phase-body { max-height: 0; }
+
+  /* ── IDENTITY CARD ── */
+  .identity-card {
+    margin: 16px 20px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 0.5px solid var(--border-mid);
+    border-radius: 10px;
+  }
+
+  .ic-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .ic-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .ic-badge {
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 999px;
+  }
+
+  .ic-desc {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .ic-attrs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ic-attr {
+    font-size: 11.5px;
+    padding: 3px 10px;
+    border: 0.5px solid var(--border-mid);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    background: var(--bg);
+  }
+
+  .ic-attr strong { color: var(--ink); font-weight: 500; }
+
+  /* ── TASK GROUP ── */
+  .task-group {
+    padding: 14px 20px;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .tg-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tg-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+
+  /* ── TASK ITEM ── */
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .task:last-child { border-bottom: none; }
+
+  .task-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .d-critical { background: var(--critical); }
+  .d-action   { background: var(--action); }
+  .d-build    { background: var(--build); }
+  .d-plan     { background: var(--ink-muted); }
+
+  .task-body { flex: 1; }
+
+  .task-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  .task-desc {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+    margin-top: 2px;
+  }
+
+  .task-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .t-critical { background: var(--critical-soft); color: var(--critical); }
+  .t-action   { background: var(--action-soft);   color: var(--action); }
+  .t-build    { background: var(--build-soft);     color: var(--build); }
+  .t-plan     { background: var(--cream);          color: var(--ink-muted); }
+
+  /* ── METRICS ── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .metric {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .metric-n {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 28px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .metric-l {
+    font-size: 11px;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 1.25rem;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+  }
+
+  .legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .phase.closed .phase-body { max-height: none !important; }
+    .phase-header { cursor: default; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="rm-header">
+    <div class="rm-wordmark"><em>Oliva</em>craft</div>
+    <div class="rm-meta">
+      <p>Roadmap absoluto</p>
+      <p>1 persona + IA · 2025–2026</p>
+      <p>Generado con Claude · Olivacraft</p>
+    </div>
+  </header>
+
+  <div class="context-callout">
+    <strong>Contexto actual:</strong> 0 clientes activos. Primer cliente potencial la próxima semana — caso ya avanzado, sin interferir con el sitio. Sitio no está en explotación pública. <strong>Urgencia inmediata: identidad de marca</strong> — sin sistema visual coherente no hay credibilidad en el primer entregable.
+  </div>
+
+  <div class="timeline">
+    <div class="tl-phase now">
+      <div class="tl-num">F1</div>
+      <div class="tl-name">Cimientos</div>
+      <div class="tl-time">Sem 1–3</div>
+    </div>
+    <div class="tl-phase near">
+      <div class="tl-num">F2</div>
+      <div class="tl-name">Tracción</div>
+      <div class="tl-time">Sem 4–9</div>
+    </div>
+    <div class="tl-phase mid">
+      <div class="tl-num">F3</div>
+      <div class="tl-name">Autoridad</div>
+      <div class="tl-time">Mes 3–5</div>
+    </div>
+    <div class="tl-phase later">
+      <div class="tl-num">F4</div>
+      <div class="tl-name">Escala</div>
+      <div class="tl-time">Mes 5–8</div>
+    </div>
+    <div class="tl-phase later">
+      <div class="tl-num">F5</div>
+      <div class="tl-name">Sistema</div>
+      <div class="tl-time">Mes 8+</div>
+    </div>
+  </div>
+
+  <!-- FASE 1 -->
+  <div class="phase phase-now" id="p1">
+    <div class="phase-header" onclick="tog('p1')">
+      <div class="ph-num">1</div>
+      <div class="ph-info">
+        <div class="ph-label">Fase 1 · Ahora mismo</div>
+        <div class="ph-title">Cimientos — identidad + correcciones críticas</div>
+      </div>
+      <div class="ph-time">Sem 1–3</div>
+      <div class="ph-toggle">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="identity-card">
+        <div class="ic-head">
+          <div class="ic-title">Identidad de marca</div>
+          <span class="ic-badge">Urgente · Tú ejecutas</span>
+        </div>
+        <div class="ic-desc">
+          Dirección validada: minimal tipográfico · cálida + premium · paleta nueva desde cero. El nombre porta la carga semántica: <em>Oliva</em> como concepto (equilibrio, presencia, sofisticación contenida) + <em>craft</em> (construcción guiada y acompañada).
+        </div>
+        <div class="ic-attrs">
+          <span class="ic-attr"><strong>Tipo:</strong> Wordmark puro</span>
+          <span class="ic-attr"><strong>Tono:</strong> Serif + Sans</span>
+          <span class="ic-attr"><strong>Paleta:</strong> Por definir — pendiente dirección cromática</span>
+          <span class="ic-attr"><strong>Entregable:</strong> Logo SVG + tokens de color</span>
+          <span class="ic-attr"><strong>Herramienta:</strong> Figma / Illustrator</span>
+        </div>
+      </div>
+
+      <div class="task-group">
+        <div class="tg-label">Correcciones críticas en código</div>
+        <div class="task">
+          <div class="task-dot d-critical"></div>
+          <div class="task-body">
+            <div class="task-title">Typo doble en sección de oferta: "evisión estuctural"</div>
+            <div class="task-desc">index.html ~línea 171. Daña credibilidad directamente en la zona de precios.</div>
+          </div>
+          <div class="task-tag t-critical">Crítico</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-critical"></div>
+          <div class="task-body">
+            <div class="task-title">Selector CSS roto en service switch</div>
+            <div class="task-desc">index.js ~L354: <code style="font-size:11px;background:#f0ede7;padding:1px 4px;border-radius:3px">[data-oferta-features</code> sin corchete de cierre. Feature 1 nunca se actualiza al cambiar servicio.</div>
+          </div>
+          <div class="task-tag t-critical">Crítico</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-critical"></div>
+          <div class="task-body">
+            <div class="task-title">404.html sin header ni footer</div>
+            <div class="task-desc">El usuario queda huérfano sin navegación de retorno al sitio principal.</div>
+          </div>
+          <div class="task-tag t-critical">Crítico</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-critical"></div>
+          <div class="task-body">
+            <div class="task-title">send.php ausente — formulario falla en silencio</div>
+            <div class="task-desc">Reemplazar con Web3Forms o Formspree. Sin backend los mensajes de contacto no llegan.</div>
+          </div>
+          <div class="task-tag t-critical">Crítico</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-critical"></div>
+          <div class="task-body">
+            <div class="task-title">data-contacto-time-text vacío en modo auditoría</div>
+            <div class="task-desc">El objeto <code style="font-size:11px;background:#f0ede7;padding:1px 4px;border-radius:3px">audit</code> en serviceContent no define timeText. El texto puede quedar en blanco al cargar.</div>
+          </div>
+          <div class="task-tag t-critical">Crítico</div>
+        </div>
+      </div>
+
+      <div class="task-group">
+        <div class="tg-label">Infraestructura mínima</div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">Conectar formulario a backend real</div>
+            <div class="task-desc">Web3Forms (gratuito) o Formspree. Testear flujo completo incluyendo Cloudflare Turnstile.</div>
+          </div>
+          <div class="task-tag t-action">Urgente</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">Analytics: Google Analytics 4 o Plausible</div>
+            <div class="task-desc">Plausible recomendado: $9/mes, sin cookies, GDPR-safe. Necesario para medir desde el primer día de tráfico real.</div>
+          </div>
+          <div class="task-tag t-action">Urgente</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">Google Search Console + sitemap.xml + robots.txt</div>
+            <div class="task-desc">Sin estos archivos Google no indexa correctamente. Configurar antes de cualquier acción SEO.</div>
+          </div>
+          <div class="task-tag t-action">Urgente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="phase" id="p2">
+    <div class="phase-header" onclick="tog('p2')">
+      <div class="ph-num">2</div>
+      <div class="ph-info">
+        <div class="ph-label">Fase 2 · Semanas 4–9</div>
+        <div class="ph-title">Tracción — primeros clientes reales</div>
+      </div>
+      <div class="ph-time">6 semanas</div>
+      <div class="ph-toggle">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="task-group">
+        <div class="tg-label">LinkedIn como canal principal (orgánico)</div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">2 posts semanales de fricción detectada</div>
+            <div class="task-desc">Tú defines el insight real. IA redacta, sugiere hooks y adapta el formato. Mayor ROI para B2B en LatAm sin presupuesto.</div>
+          </div>
+          <div class="task-tag t-action">Recurrente</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">1 post semanal de opinión / proceso</div>
+            <div class="task-desc">Posicionamiento como referente UX. Behind-the-scenes cada dos semanas para humanizar la marca.</div>
+          </div>
+          <div class="task-tag t-action">Recurrente</div>
+        </div>
+      </div>
+      <div class="task-group">
+        <div class="tg-label">Outreach directo a pymes</div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">20 pymes identificadas por semana (LinkedIn / Google Maps)</div>
+            <div class="task-desc">Mini-auditoría de 15 min por sitio con IA. Mensaje directo con 1 hallazgo gratuito. No vender en el primer contacto.</div>
+          </div>
+          <div class="task-tag t-action">Activo</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-action"></div>
+          <div class="task-body">
+            <div class="task-title">Tasa esperable: 2–4 respuestas por cada 20 mensajes</div>
+            <div class="task-desc">El cierre ocurre en la segunda interacción. El primer mensaje es para demostrar valor, no para vender.</div>
+          </div>
+          <div class="task-tag t-action">Proceso</div>
+        </div>
+      </div>
+      <div class="task-group">
+        <div class="tg-label">Portafolio público</div>
+        <div class="task">
+          <div class="task-dot d-build"></div>
+          <div class="task-body">
+            <div class="task-title">Actualizar portafolio con casos reales</div>
+            <div class="task-desc">Koyam, Rafcon y primer cliente. Estructura mínima por caso: problema → proceso → resultado medible.</div>
+          </div>
+          <div class="task-tag t-build">Antes del cliente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="phase closed" id="p3">
+    <div class="phase-header" onclick="tog('p3')">
+      <div class="ph-num">3</div>
+      <div class="ph-info">
+        <div class="ph-label">Fase 3 · Meses 3–5</div>
+        <div class="ph-title">Autoridad — que te encuentren sin buscarte</div>
+      </div>
+      <div class="ph-time">2–3 meses</div>
+      <div class="ph-toggle">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="task-group">
+        <div class="tg-label">SEO de contenido</div>
+        <div class="task">
+          <div class="task-dot d-build"></div>
+          <div class="task-body">
+            <div class="task-title">1 artículo semanal (500–900 palabras · IA + criterio propio)</div>
+            <div class="task-desc">Temas: errores UX comunes · cómo auditar X · por qué tu sitio no convierte. Agregar sección /blog o Notion como CMS temporal.</div>
+          </div>
+          <div class="task-tag t-build">Orgánico</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-build"></div>
+          <div class="task-body">
+            <div class="task-title">Keywords de alta intención en LatAm (baja competencia)</div>
+            <div class="task-desc">"auditoría UX pymes Chile" · "cómo saber si mi sitio pierde clientes" · "formulario de contacto no recibe mensajes"</div>
+          </div>
+          <div class="task-tag t-build">SEO</div>
+        </div>
+      </div>
+      <div class="task-group">
+        <div class="tg-label">Casos de estudio y testimonios</div>
+        <div class="task">
+          <div class="task-dot d-build"></div>
+          <div class="task-body">
+            <div class="task-title">1 caso documentado por cliente pagado. Sin excepción.</div>
+            <div class="task-desc">Contexto · hallazgo · solución · resultado. Con 3 casos el sitio empieza a vender solo sin outreach activo.</div>
+          </div>
+          <div class="task-tag t-build">Activo</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-build"></div>
+          <div class="task-body">
+            <div class="task-title">Sección de testimonios en el sitio</div>
+            <div class="task-desc">Ubicar entre Resultados y Contacto. Nombre, empresa, resultado concreto. Foto si es posible.</div>
+          </div>
+          <div class="task-tag t-build">Sitio web</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="phase closed" id="p4">
+    <div class="phase-header" onclick="tog('p4')">
+      <div class="ph-num">4</div>
+      <div class="ph-info">
+        <div class="ph-label">Fase 4 · Meses 5–8</div>
+        <div class="ph-title">Escala — volumen sin aumentar caos</div>
+      </div>
+      <div class="ph-time">2–3 meses</div>
+      <div class="ph-toggle">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="task-group">
+        <div class="tg-label">Sistematizar entrega de servicios</div>
+        <div class="task">
+          <div class="task-dot d-plan"></div>
+          <div class="task-body">
+            <div class="task-title">Plantilla reutilizable de informe de auditoría</div>
+            <div class="task-desc">Notion o Figma. Reduce tiempo de entrega por proyecto y mantiene calidad consistente.</div>
+          </div>
+          <div class="task-tag t-plan">Sistema</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-plan"></div>
+          <div class="task-body">
+            <div class="task-title">Formulario de briefing estandarizado para onboarding</div>
+            <div class="task-desc">Elimina idas y vueltas innecesarias al inicio de cada proyecto. Define alcance desde el día 1.</div>
+          </div>
+          <div class="task-tag t-plan">Sistema</div>
+        </div>
+      </div>
+      <div class="task-group">
+        <div class="tg-label">Revisión de precios (con casos + testimonios)</div>
+        <div class="task">
+          <div class="task-dot d-plan"></div>
+          <div class="task-body">
+            <div class="task-title">Estructura escalonada en tres tiers</div>
+            <div class="task-desc">Express $79–99K · Estándar $149–199K · Premium $290–390K CLP. El precio actual de $99K es de entrada — debe subir con evidencia.</div>
+          </div>
+          <div class="task-tag t-plan">Pricing</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-plan"></div>
+          <div class="task-body">
+            <div class="task-title">Segundo canal de adquisición</div>
+            <div class="task-desc">Opciones: Google Ads Search ($150–200 USD/mes mínimo) · Colaboraciones con agencias que no tienen UX interno · Newsletter propia.</div>
+          </div>
+          <div class="task-tag t-plan">Canal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 5 -->
+  <div class="phase closed" id="p5">
+    <div class="phase-header" onclick="tog('p5')">
+      <div class="ph-num">5</div>
+      <div class="ph-info">
+        <div class="ph-label">Fase 5 · Mes 8+</div>
+        <div class="ph-title">Sistema — demanda sin intervención constante</div>
+      </div>
+      <div class="ph-time">Ongoing</div>
+      <div class="ph-toggle">▼</div>
+    </div>
+    <div class="phase-body">
+      <div class="task-group">
+        <div class="tg-label">Estado objetivo del negocio</div>
+        <div class="task">
+          <div class="task-dot d-plan"></div>
+          <div class="task-body">
+            <div class="task-title">SEO generando tráfico pasivo semanal constante</div>
+            <div class="task-desc">Casos de estudio cerrando clientes sin pitch activo. El sitio trabaja solo.</div>
+          </div>
+          <div class="task-tag t-plan">Meta</div>
+        </div>
+        <div class="task">
+          <div class="task-dot d-plan"></div>
+          <div class="task-body">
+            <div class="task-title">Agenda con 2–3 semanas de anticipación</div>
+            <div class="task-desc">Punto de decisión estratégica: mantener como estudio personal o escalar con colaboradores externos.</div>
+          </div>
+          <div class="task-tag t-plan">Meta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-n">5</div>
+      <div class="metric-l">fases estructuradas</div>
+    </div>
+    <div class="metric">
+      <div class="metric-n">6–9</div>
+      <div class="metric-l">meses a sistema autónomo</div>
+    </div>
+    <div class="metric">
+      <div class="metric-n">1+IA</div>
+      <div class="metric-l">ritmo sostenible</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot d-critical"></div> Bug crítico</div>
+    <div class="legend-item"><div class="legend-dot d-action"></div> Acción activa</div>
+    <div class="legend-item"><div class="legend-dot d-build"></div> Construcción</div>
+    <div class="legend-item"><div class="legend-dot d-plan"></div> Planificación futura</div>
+  </div>
+
+</div>
+
+<script>
+function tog(id) {
+  document.getElementById(id).classList.toggle('closed');
+}
+</script>
+</body>
+</html>
