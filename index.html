@@ -1,834 +1,1967 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Olivacraft — Roadmap Absoluto</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --ink:          #1C1C1A;
-    --ink-soft:     #4A4A44;
-    --ink-muted:    #8A8A82;
-    --bg:           #FAFAF7;
-    --surface:      #F4F1EB;
-    --cream:        #EDE8DF;
-    --border:       rgba(28,28,26,0.12);
-    --border-mid:   rgba(28,28,26,0.22);
-    --accent:       #2A2A26;
-    --accent-soft:  #E8E4DC;
-    --gold:         #B89A52;
-    --gold-soft:    #F0E6CA;
-    --critical:     #C0392B;
-    --critical-soft:#FAECEB;
-    --action:       #2D5016;
-    --action-soft:  #E6EDD9;
-    --build:        #7A5C1E;
-    --build-soft:   #F5EDD4;
-  }
-
-  html { font-size: 16px; }
-
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-  }
-
-  /* ── LAYOUT ── */
-  .page {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 3rem 2rem 5rem;
-  }
-
-  /* ── HEADER ── */
-  .rm-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-mid);
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .rm-wordmark {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 32px;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    color: var(--ink);
-  }
-
-  .rm-wordmark em {
-    font-style: italic;
-    color: var(--ink-soft);
-  }
-
-  .rm-meta {
-    text-align: right;
-  }
-
-  .rm-meta p {
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    line-height: 1.7;
-  }
-
-  /* ── CONTEXT CALLOUT ── */
-  .context-callout {
-    background: var(--gold-soft);
-    border: 0.5px solid var(--gold);
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-bottom: 2rem;
-    font-size: 13px;
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
-
-  .context-callout strong { color: var(--ink); font-weight: 500; }
-
-  /* ── TIMELINE STRIP ── */
-  .timeline {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    border: 0.5px solid var(--border-mid);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 2.5rem;
-  }
-
-  .tl-phase {
-    padding: 12px 10px;
-    text-align: center;
-    border-right: 0.5px solid var(--border);
-  }
-
-  .tl-phase:last-child { border-right: none; }
-
-  .tl-phase.now   { background: var(--accent); }
-  .tl-phase.near  { background: var(--accent-soft); }
-  .tl-phase.mid   { background: var(--surface); }
-  .tl-phase.later { background: var(--cream); }
-
-  .tl-num {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 3px;
-  }
-
-  .tl-phase.now .tl-num   { color: rgba(255,255,255,0.55); }
-  .tl-phase:not(.now) .tl-num { color: var(--ink-muted); }
-
-  .tl-name {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 13px;
-    line-height: 1.2;
-  }
-
-  .tl-phase.now .tl-name  { color: #fff; }
-  .tl-phase.near .tl-name { color: var(--accent); }
-  .tl-phase:not(.now):not(.near) .tl-name { color: var(--ink-soft); }
-
-  .tl-time {
-    font-size: 10px;
-    margin-top: 3px;
-    color: var(--ink-muted);
-  }
-
-  .tl-phase.now .tl-time { color: rgba(255,255,255,0.5); }
-
-  /* ── PHASE BLOCK ── */
-  .phase {
-    margin-bottom: 1.25rem;
-    border: 0.5px solid var(--border-mid);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .phase.phase-now { border-color: var(--accent); }
-
-  .phase-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 20px;
-    cursor: pointer;
-    user-select: none;
-    background: var(--surface);
-    transition: background 0.15s;
-  }
-
-  .phase-now .phase-header {
-    background: var(--accent);
-  }
-
-  .phase-header:hover { filter: brightness(0.97); }
-
-  .ph-num {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 15px;
-    flex-shrink: 0;
-  }
-
-  .phase-now .ph-num   { background: rgba(255,255,255,0.18); color: #fff; }
-  .phase:not(.phase-now) .ph-num { background: var(--cream); color: var(--ink); }
-
-  .ph-info { flex: 1; }
-
-  .ph-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    margin-bottom: 2px;
-  }
-
-  .phase-now .ph-label    { color: rgba(255,255,255,0.55); }
-  .phase:not(.phase-now) .ph-label { color: var(--ink-muted); }
-
-  .ph-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 16px;
-    line-height: 1.2;
-  }
-
-  .phase-now .ph-title    { color: #fff; }
-  .phase:not(.phase-now) .ph-title { color: var(--ink); }
-
-  .ph-time {
-    font-size: 11px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .phase-now .ph-time     { color: rgba(255,255,255,0.55); }
-  .phase:not(.phase-now) .ph-time { color: var(--ink-muted); }
-
-  .ph-toggle {
-    font-size: 11px;
-    transition: transform 0.25s;
-    flex-shrink: 0;
-  }
-
-  .phase-now .ph-toggle   { color: rgba(255,255,255,0.55); }
-  .phase:not(.phase-now) .ph-toggle { color: var(--ink-muted); }
-
-  .phase.closed .ph-toggle { transform: rotate(-90deg); }
-
-  /* ── PHASE BODY ── */
-  .phase-body {
-    background: #fff;
-    overflow: hidden;
-    max-height: 3000px;
-    transition: max-height 0.4s ease;
-  }
-
-  .phase.closed .phase-body { max-height: 0; }
-
-  /* ── IDENTITY CARD ── */
-  .identity-card {
-    margin: 16px 20px;
-    padding: 16px 18px;
-    background: var(--surface);
-    border: 0.5px solid var(--border-mid);
-    border-radius: 10px;
-  }
-
-  .ic-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  .ic-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 15px;
-    color: var(--ink);
-  }
-
-  .ic-badge {
-    font-size: 9.5px;
-    font-weight: 500;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    background: var(--ink);
-    color: #fff;
-    border-radius: 999px;
-  }
-
-  .ic-desc {
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    line-height: 1.6;
-    margin-bottom: 12px;
-  }
-
-  .ic-attrs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .ic-attr {
-    font-size: 11.5px;
-    padding: 3px 10px;
-    border: 0.5px solid var(--border-mid);
-    border-radius: 999px;
-    color: var(--ink-soft);
-    background: var(--bg);
-  }
-
-  .ic-attr strong { color: var(--ink); font-weight: 500; }
-
-  /* ── TASK GROUP ── */
-  .task-group {
-    padding: 14px 20px;
-    border-top: 0.5px solid var(--border);
-  }
-
-  .tg-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .tg-label::after {
-    content: '';
-    flex: 1;
-    height: 0.5px;
-    background: var(--border);
-  }
-
-  /* ── TASK ITEM ── */
-  .task {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 0.5px solid var(--border);
-  }
-
-  .task:last-child { border-bottom: none; }
-
-  .task-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 5px;
-  }
-
-  .d-critical { background: var(--critical); }
-  .d-action   { background: var(--action); }
-  .d-build    { background: var(--build); }
-  .d-plan     { background: var(--ink-muted); }
-
-  .task-body { flex: 1; }
-
-  .task-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.35;
-  }
-
-  .task-desc {
-    font-size: 12px;
-    color: var(--ink-muted);
-    line-height: 1.55;
-    margin-top: 2px;
-  }
-
-  .task-tag {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    padding: 2px 8px;
-    border-radius: 999px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .t-critical { background: var(--critical-soft); color: var(--critical); }
-  .t-action   { background: var(--action-soft);   color: var(--action); }
-  .t-build    { background: var(--build-soft);     color: var(--build); }
-  .t-plan     { background: var(--cream);          color: var(--ink-muted); }
-
-  /* ── METRICS ── */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .metric {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    text-align: center;
-  }
-
-  .metric-n {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 28px;
-    color: var(--ink);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .metric-l {
-    font-size: 11px;
-    color: var(--ink-muted);
-    line-height: 1.4;
-  }
-
-  /* ── LEGEND ── */
-  .legend {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding-top: 1.25rem;
-    border-top: 0.5px solid var(--border);
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11.5px;
-    color: var(--ink-muted);
-  }
-
-  .legend-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  /* ── PRINT ── */
-  @media print {
-    .phase.closed .phase-body { max-height: none !important; }
-    .phase-header { cursor: default; }
-    body { background: white; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivacraft — Centro de Control</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9,600;0,9,700;1,9,300&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. MAESTRO: CONTROL DE VISTAS (TABS)
+       ========================================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: #F2F8FD; /* Blanco Frío de la marca */
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .master-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background: #0D2B4A; /* Azul Noche */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      z-index: 9999;
+      border-bottom: 1px solid rgba(62,198,212,0.15);
+      padding: 0 1rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: #0A7EC2; /* Azul Activo */
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .view-content {
+      display: none;
+      margin-top: 50px;
+      min-height: calc(100vh - 50px);
+    }
+
+    .view-content.active {
+      display: block;
+    }
+
+    /* ==========================================================================
+       2. ROADMAP ABSOLUTO (Estilizado con el Brand Manual)
+       ========================================================================== */
+    #view-roadmap {
+      background: #F2F8FD; /* Blanco frío */
+      color: #1A2C3D; /* Ink */
+      padding-top: 1rem;
+    }
+
+    #view-roadmap .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    #view-roadmap .rm-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(10,126,194,0.22); /* Border-mid */
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    #view-roadmap .rm-wordmark {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: #0D2B4A; /* Azul Noche */
+      font-variation-settings: 'opsz' 9;
+    }
+
+    #view-roadmap .rm-wordmark em {
+      font-style: italic;
+      font-weight: 300;
+      color: #0A7EC2; /* Azul Activo */
+    }
+
+    #view-roadmap .rm-meta {
+      text-align: right;
+    }
+
+    #view-roadmap .rm-meta p {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6A8EA8; /* Ink muted */
+      line-height: 1.7;
+    }
+
+    /* Ajustado al Callout de la Marca */
+    #view-roadmap .context-callout {
+      background: #EAF3FB; /* Surface */
+      border: 0.5px solid #0A7EC2; /* Azul Activo */
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 2rem;
+      font-size: 13px;
+      color: #3D5A74; /* Ink soft */
+      line-height: 1.6;
+    }
+
+    #view-roadmap .context-callout strong {
+      color: #0D2B4A;
+      font-weight: 600;
+    }
+
+    /* Timeline alineada a la paleta de marca */
+    #view-roadmap .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 0.5px solid rgba(10,126,194,0.22);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+
+    #view-roadmap .tl-phase {
+      padding: 12px 10px;
+      text-align: center;
+      border-right: 0.5px solid rgba(10,126,194,0.12);
+      background: #FFFFFF;
+    }
+
+    #view-roadmap .tl-phase:last-child { border-right: none; }
+
+    #view-roadmap .tl-phase.now    { background: #0D2B4A; } /* Azul Noche */
+    #view-roadmap .tl-phase.near   { background: #EAF3FB; } /* Surface */
+    #view-roadmap .tl-phase.mid    { background: #FFFFFF; } 
+    #view-roadmap .tl-phase.later  { background: #FFFFFF; opacity: 0.7; }
+
+    #view-roadmap .tl-num {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    #view-roadmap .tl-phase.now .tl-num   { color: #3EC6D4; } /* Cian de apoyo */
+    #view-roadmap .tl-phase:not(.now) .tl-num { color: #6A8EA8; }
+
+    #view-roadmap .tl-name {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 13px;
+      line-height: 1.2;
+      font-variation-settings: 'opsz' 9;
+    }
+
+    #view-roadmap .tl-phase.now .tl-name  { color: #FFFFFF; }
+    #view-roadmap .tl-phase.near .tl-name { color: #0D2B4A; font-weight: 600; }
+    #view-roadmap .tl-phase:not(.now):not(.near) .tl-name { color: #3D5A74; }
+
+    #view-roadmap .tl-time {
+      font-size: 10px;
+      margin-top: 3px;
+      color: #6A8EA8;
+    }
+
+    #view-roadmap .tl-phase.now .tl-time { color: rgba(255,255,255,0.5); }
+
+    /* Bloques de Fase */
+    #view-roadmap .phase {
+      margin-bottom: 1.25rem;
+      border: 0.5px solid rgba(10,126,194,0.22);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #FFFFFF;
+    }
+
+    #view-roadmap .phase.phase-now { border-color: #0D2B4A; box-shadow: 0 4px 12px rgba(13,43,74,0.04); }
+
+    #view-roadmap .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+      background: #EAF3FB; /* Surface */
+      transition: background 0.15s;
+    }
+
+    #view-roadmap .phase-now .phase-header {
+      background: #0D2B4A; /* Azul Noche */
+    }
+
+    #view-roadmap .phase-header:hover { filter: brightness(0.98); }
+
+    #view-roadmap .ph-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 15px;
+      flex-shrink: 0;
+      font-variation-settings: 'opsz' 9;
+    }
+
+    #view-roadmap .phase-now .ph-num    { background: rgba(255,255,255,0.15); color: #3EC6D4; }
+    #view-roadmap .phase:not(.phase-now) .ph-num { background: rgba(10,126,194,0.1); color: #0D2B4A; }
+
+    #view-roadmap .ph-info { flex: 1; }
+
+    #view-roadmap .ph-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    #view-roadmap .phase-now .ph-label     { color: #6A8EA8; }
+    #view-roadmap .phase:not(.phase-now) .ph-label { color: #6A8EA8; }
+
+    #view-roadmap .ph-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.2;
+      font-variation-settings: 'opsz' 9;
+    }
+
+    #view-roadmap .phase-now .ph-title     { color: #FFFFFF; font-style: italic; font-weight: 300; }
+    #view-roadmap .phase:not(.phase-now) .ph-title { color: #0D2B4A; font-weight: 600; }
+
+    #view-roadmap .ph-time {
+      font-size: 11px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+
+    #view-roadmap .phase-now .ph-time      { color: #3EC6D4; }
+    #view-roadmap .phase:not(.phase-now) .ph-time { color: #6A8EA8; }
+
+    #view-roadmap .ph-toggle {
+      font-size: 11px;
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+
+    #view-roadmap .phase-now .ph-toggle    { color: #FFFFFF; }
+    #view-roadmap .phase:not(.phase-now) .ph-toggle { color: #6A8EA8; }
+    #view-roadmap .phase.closed .ph-toggle { transform: rotate(-90deg); }
+
+    #view-roadmap .phase-body {
+      background: #FFFFFF;
+      overflow: hidden;
+      max-height: 3000px;
+      transition: max-height 0.4s ease;
+    }
+
+    #view-roadmap .phase.closed .phase-body { max-height: 0; }
+
+    /* Identity Card adaptada a los componentes del manual */
+    #view-roadmap .identity-card {
+      margin: 16px 20px;
+      padding: 16px 18px;
+      background: #F2F8FD; /* Frost */
+      border: 0.5px solid rgba(10,126,194,0.12);
+      border-radius: 10px;
+    }
+
+    #view-roadmap .ic-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    #view-roadmap .ic-title { font-family: 'Fraunces', Georgia, serif; font-size: 15px; color: #0D2B4A; font-variation-settings: 'opsz' 9; font-weight: 600; }
+    #view-roadmap .ic-badge { font-size: 9.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 8px; background: #0A7EC2; color: #fff; border-radius: 999px; }
+    #view-roadmap .ic-desc { font-size: 13px; color: #3D5A74; line-height: 1.6; margin-bottom: 12px; }
+    #view-roadmap .ic-attrs { display: flex; flex-wrap: wrap; gap: 6px; }
+    #view-roadmap .ic-attr { font-size: 11.5px; padding: 3px 10px; border: 0.5px solid rgba(10,126,194,0.12); border-radius: 999px; color: #3D5A74; background: #FFFFFF; }
+    #view-roadmap .ic-attr strong { color: #0D2B4A; font-weight: 500; }
+
+    /* Tasks Groups */
+    #view-roadmap .task-group { padding: 14px 20px; border-top: 0.5px solid rgba(10,126,194,0.12); }
+    #view-roadmap .tg-label { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6A8EA8; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    #view-roadmap .tg-label::after { content: ''; flex: 1; height: 0.5px; background: rgba(10,126,194,0.12); }
+
+    #view-roadmap .task { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid rgba(10,126,194,0.12); }
+    #view-roadmap .task:last-child { border-bottom: none; }
+    #view-roadmap .task-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    
+    /* Estados de urgencia mapeados a la paleta del manual */
+    #view-roadmap .d-critical { background: #E24B4A; } /* Rojo Alerta */
+    #view-roadmap .d-action   { background: #0A7EC2; } /* Azul Activo */
+    #view-roadmap .d-build    { background: #3EC6D4; } /* Cian Construcción */
+    #view-roadmap .d-plan     { background: #9AB4C8; } /* Inactivo */
+
+    #view-roadmap .task-body { flex: 1; }
+    #view-roadmap .task-title { font-size: 13.5px; font-weight: 500; color: #1A2C3D; line-height: 1.35; }
+    #view-roadmap .task-desc { font-size: 12px; color: #3D5A74; line-height: 1.55; margin-top: 2px; }
+    
+    #view-roadmap .task-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    #view-roadmap .t-critical { background: #FDECEC; color: #E24B4A; }
+    #view-roadmap .t-action   { background: #EAF3FB; color: #0A7EC2; }
+    #view-roadmap .t-build    { background: rgba(62,198,212,0.1); color: #118D9B; }
+    #view-roadmap .t-plan     { background: #FFFFFF; border: 0.5px solid rgba(10,126,194,0.12); color: #6A8EA8; }
+
+    /* Metrics y Legend */
+    #view-roadmap .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 2rem; margin-bottom: 1.5rem; }
+    #view-roadmap .metric { background: #EAF3FB; border: 0.5px solid rgba(10,126,194,0.12); border-radius: 10px; padding: 14px 16px; text-align: center; }
+    #view-roadmap .metric-n { font-family: 'Fraunces', Georgia, serif; font-size: 28px; color: #0D2B4A; line-height: 1; margin-bottom: 4px; font-variation-settings: 'opsz' 9; }
+    #view-roadmap .metric-l { font-size: 11px; color: #3D5A74; line-height: 1.4; font-weight: 500; }
+    
+    #view-roadmap .legend { display: flex; gap: 16px; flex-wrap: wrap; padding-top: 1.25rem; border-top: 0.5px solid rgba(10,126,194,0.12); }
+    #view-roadmap .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #6A8EA8; }
+    #view-roadmap .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ==========================================================================
+       3. CSS ENCAPSULADO: BRAND MANUAL (VISTA 2)
+       ========================================================================== */
+    #view-brand {
+      --night: #0D2B4A;
+      --blue: #0A7EC2;
+      --cyan: #3EC6D4;
+      --frost: #F2F8FD;
+      --white: #FFFFFF;
+      --ink: #1A2C3D;
+      --ink-soft: #3D5A74;
+      --ink-muted: #6A8EA8;
+      --ink-faint: #9AB4C8;
+      --border: rgba(10,126,194,0.12);
+      --border-mid: rgba(10,126,194,0.22);
+      --surface: #EAF3FB;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      background: var(--frost);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    #view-brand .layout { display: flex; min-height: calc(100vh - 50px); }
+    #view-brand .sidebar { position: fixed; top: 50px; left: 0; width: 220px; height: calc(100vh - 50px); background: var(--night); padding: 2rem 0; overflow-y: auto; z-index: 100; display: flex; flex-direction: column; }
+    #view-brand .sb-brand { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 1rem; }
+    #view-brand .sb-wordmark { font-family: var(--font-display); font-size: 20px; line-height: 1; letter-spacing: -0.02em; }
+    #view-brand .sb-wordmark em { font-style: italic; font-weight: 300; color: var(--cyan); font-variation-settings: 'opsz' 9; }
+    #view-brand .sb-wordmark span { font-weight: 600; color: #fff; font-variation-settings: 'opsz' 9; }
+    #view-brand .sb-wordmark strong { font-weight: 700; color: var(--cyan); font-style: normal; }
+    #view-brand .sb-version { font-size: 10px; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
+    #view-brand .sb-section-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); padding: 0.75rem 1.5rem 0.35rem; }
+    #view-brand .sb-link { display: flex; align-items: center; gap: 8px; padding: 7px 1.5rem; font-size: 12.5px; font-weight: 400; color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.15s, background 0.15s; border-left: 2px solid transparent; }
+    #view-brand .sb-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    #view-brand .sb-link.active { color: var(--cyan); border-left-color: var(--cyan); background: rgba(62,198,212,0.06); }
+    #view-brand .sb-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; opacity: 0.5; }
+    #view-brand .sb-link.active .sb-dot { opacity: 1; }
+    #view-brand .sb-footer { margin-top: auto; padding: 1rem 1.5rem 0; border-top: 1px solid rgba(255,255,255,0.06); font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.6; }
+    #view-brand .main { margin-left: 220px; flex: 1; padding: 3rem 3.5rem 6rem; max-width: calc(100vw - 220px); }
+    #view-brand .cover { background: var(--night); border-radius: 16px; padding: 4rem 3.5rem; margin-bottom: 3rem; position: relative; overflow: hidden; }
+    #view-brand .cover::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; background: rgba(62,198,212,0.04); border: 1px solid rgba(62,198,212,0.08); }
+    #view-brand .cover-wordmark { font-family: var(--font-display); font-size: 56px; line-height: 1; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    #view-brand .cover-wordmark em { font-style: italic; font-weight: 300; color: var(--cyan); font-variation-settings: 'opsz' 9; }
+    #view-brand .cover-wordmark span { font-weight: 600; color: #fff; font-variation-settings: 'opsz' 9; }
+    #view-brand .cover-wordmark sup { font-size: 52px; font-weight: 700; color: var(--cyan); font-style: normal; vertical-align: super; margin-left: 2px; }
+    #view-brand .cover-tagline { font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 2.5rem; }
+    #view-brand .cover-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+    #view-brand .cover-meta-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 3px; }
+    #view-brand .cover-meta-value { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.7); }
+    #view-brand .section { margin-bottom: 3.5rem; scroll-margin-top: 5rem; }
+    #view-brand .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 1.75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-mid); }
+    #view-brand .section-num { font-family: var(--font-display); font-size: 13px; font-style: italic; color: var(--blue); min-width: 28px; }
+    #view-brand .section-title { font-family: var(--font-display); font-size: 26px; font-weight: 500; letter-spacing: -0.02em; color: var(--night); line-height: 1.1; }
+    #view-brand .card { background: var(--white); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2px; }
+    #view-brand .card-head { padding: 10px 16px; background: var(--surface); border-bottom: 0.5px solid var(--border); font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-muted); }
+    #view-brand .card-body { padding: 1.5rem; }
+    #view-brand .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    #view-brand .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+    #view-brand .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+    #view-brand .wm-box { border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+    #view-brand .wm-preview { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 2rem 2rem 1.5rem; min-height: 130px; }
+    #view-brand .wm-text { font-family: var(--font-display); letter-spacing: -0.025em; line-height: 1; display: flex; align-items: baseline; }
+    #view-brand .wm-tagline-preview { font-family: var(--font-body); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 10px; }
+    #view-brand .wm-meta { padding: 10px 16px; border-top: 0.5px solid var(--border); background: var(--surface); }
+    #view-brand .wm-meta-title { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+    #view-brand .wm-meta-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
+    #view-brand .color-token { border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+    #view-brand .color-swatch { height: 60px; }
+    #view-brand .color-info { padding: 10px 12px; background: var(--white); }
+    #view-brand .color-name { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+    #view-brand .color-hex { font-size: 11px; font-family: monospace; color: var(--ink-muted); margin-bottom: 2px; }
+    #view-brand .color-role { font-size: 10.5px; color: var(--ink-faint); line-height: 1.4; }
+    #view-brand .type-row { display: flex; align-items: baseline; gap: 1.5rem; padding: 1rem 0; border-bottom: 0.5px solid var(--border); }
+    #view-brand .type-row:last-child { border-bottom: none; }
+    #view-brand .type-sample { flex: 1; }
+    #view-brand .type-spec { font-size: 10.5px; color: var(--ink-faint); line-height: 1.6; min-width: 200px; font-family: monospace; }
+    #view-brand .size-row { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 0; border-bottom: 0.5px solid var(--border); }
+    #view-brand .size-row:last-child { border-bottom: none; }
+    #view-brand .size-preview { display: flex; align-items: center; justify-content: flex-start; min-width: 120px; }
+    #view-brand .size-label { font-size: 11px; color: var(--ink-muted); min-width: 60px; }
+    #view-brand .size-rule { font-size: 11.5px; color: var(--ink-soft); flex: 1; line-height: 1.5; }
+    #view-brand .size-badge { font-size: 9.5px; font-weight: 500; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+    #view-brand .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    #view-brand .do-card, #view-brand .dont-card { border-radius: 10px; overflow: hidden; border: 0.5px solid var(--border); }
+    #view-brand .do-head { padding: 8px 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    #view-brand .do-head.yes { background: #E6F4EC; color: #1A6B38; }
+    #view-brand .do-head.no { background: #FDECEC; color: #8B1A1A; }
+    #view-brand .do-body { padding: 1.25rem; background: var(--white); min-height: 100px; display: flex; flex-direction: column; gap: 6px; }
+    #view-brand .do-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+    #view-brand .do-item::before { content: '·'; color: var(--ink-faint); flex-shrink: 0; margin-top: 1px; }
+    #view-brand .voice-example { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 2px; }
+    #view-brand .ve-label { font-size: 9.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 6px; }
+    #view-brand .ve-label.good { color: #1A6B38; }
+    #view-brand .ve-label.bad { color: #8B1A1A; }
+    #view-brand .ve-text { font-size: 13.5px; color: var(--ink); line-height: 1.6; font-style: italic; }
+    #view-brand .ve-text.bad { text-decoration: line-through; color: var(--ink-muted); }
+    #view-brand .mockup-frame { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2px; }
+    #view-brand .mock-label { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1rem; }
+    #view-brand .email-sig { background: var(--white); border: 0.5px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; border-left: 3px solid var(--blue); }
+    #view-brand .sig-name { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--night); margin-bottom: 2px; }
+    #view-brand .sig-role { font-size: 11.5px; color: var(--ink-muted); margin-bottom: 8px; }
+    #view-brand .sig-divider { height: 0.5px; background: var(--border); margin-bottom: 8px; }
+    #view-brand .sig-brand { font-family: var(--font-display); font-size: 13px; letter-spacing: -0.01em; }
+    #view-brand .sig-brand em { font-style: italic; font-weight: 400; color: var(--blue); }
+    #view-brand .sig-brand span { font-weight: 500; color: var(--night); }
+    #view-brand .sig-brand b { font-weight: 700; color: var(--blue); }
+    #view-brand .sig-web { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+    #view-brand .sig-web a { color: var(--blue); text-decoration: none; }
+    #view-brand .doc-header { background: var(--white); border: 0.5px solid var(--border); border-radius: 8px; overflow: hidden; }
+    #view-brand .doc-top { background: var(--night); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    #view-brand .doc-wm { font-family: var(--font-display); font-size: 16px; letter-spacing: -0.02em; display: flex; align-items: baseline; }
+    #view-brand .doc-wm em { font-style: italic; font-weight: 300; color: var(--cyan); font-variation-settings: 'opsz' 9; }
+    #view-brand .doc-wm span { font-weight: 600; color: #fff; font-variation-settings: 'opsz' 9; }
+    #view-brand .doc-wm b { font-weight: 700; color: var(--cyan); font-size: 18px; position: relative; top: -1px; }
+    #view-brand .doc-meta-right { text-align: right; }
+    #view-brand .doc-meta-right p { font-size: 10px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+    #view-brand .doc-body { padding: 1.25rem 1.5rem; }
+    #view-brand .doc-title { font-family: var(--font-display); font-size: 18px; font-weight: 500; color: var(--night); margin-bottom: 4px; }
+    #view-brand .doc-sub { font-size: 11.5px; color: var(--ink-muted); }
+    #view-brand .avatar-grid { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+    #view-brand .av-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    #view-brand .av-size { font-size: 9px; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+    #view-brand .av-circle { border-radius: 50%; background: var(--night); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #view-brand .av-inner { text-align: center; line-height: 1.1; }
+    #view-brand .checklist { display: flex; flex-direction: column; gap: 2px; }
+    #view-brand .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 0.5px solid var(--border); border-radius: 8px; background: var(--white); }
+    #view-brand .check-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    #view-brand .cd-must { background: var(--blue); }
+    #view-brand .cd-never { background: #E24B4A; }
+    #view-brand .cd-note { background: #EF9F27; }
+    #view-brand .check-text { font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
+    #view-brand .check-text strong { color: var(--ink); font-weight: 500; }
+
+    #view-brand .cover-wordmark span, #view-brand .cover-wordmark em, #view-brand .cover-wordmark sup,
+    #view-brand .sb-wordmark em, #view-brand .sb-wordmark span, #view-brand .sb-wordmark strong,
+    #view-brand .doc-wm em, #view-brand .doc-wm span, #view-brand .doc-wm b {
+      font-variation-settings: 'opsz' 9 !important;
+    }
+
+    @media (max-width: 900px) {
+      #view-brand .sidebar { width: 180px; }
+      #view-brand .main { margin-left: 180px; padding: 2rem 1.5rem 4rem; max-width: calc(100vw - 180px); }
+      #view-brand .g4 { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media print {
+      .master-nav { display: none !important; }
+      .view-content { display: block !important; margin-top: 0; }
+      #view-brand .sidebar { display: none !important; }
+      #view-brand .main { margin-left: 0 !important; max-width: 100% !important; }
+    }
+  </style>
 </head>
 <body>
-<div class="page">
 
-  <header class="rm-header">
-    <div class="rm-wordmark"><em>Oliva</em>craft</div>
-    <div class="rm-meta">
-      <p>Roadmap absoluto</p>
-      <p>1 persona + IA · 2025–2026</p>
-      <p>Generado con Claude · Olivacraft</p>
+  <nav class="master-nav">
+    <button class="tab-btn active" onclick="switchView('roadmap', this)">🗺️ Roadmap Absoluto</button>
+    <button class="tab-btn" onclick="switchView('brand', this)">🎨 Brand Manual</button>
+  </nav>
+
+  <div id="view-roadmap" class="view-content active">
+    <div class="page">
+      <header class="rm-header">
+        <div class="rm-wordmark"><em>Oliva</em>craft<span>·</span></div>
+        <div class="rm-meta">
+          <p>Roadmap absoluto</p>
+          <p>1 persona + IA · 2025–2026</p>
+          <p>Identidad Integrada · Olivacraft</p>
+        </div>
+      </header>
+
+      <div class="context-callout">
+        <strong>Contexto actual:</strong> 0 clientes activos. Primer cliente potencial la próxima semana — caso ya avanzado, sin interferir con el sitio. Sitio no está en explotación pública. <strong>Urgencia inmediata: identidad de marca</strong> — sin sistema visual coherente no hay credibilidad en el primer entregable.
+      </div>
+
+      <div class="timeline">
+        <div class="tl-phase now">
+          <div class="tl-num">F1</div>
+          <div class="tl-name">Cimientos</div>
+          <div class="tl-time">Sem 1–3</div>
+        </div>
+        <div class="tl-phase near">
+          <div class="tl-num">F2</div>
+          <div class="tl-name">Tracción</div>
+          <div class="tl-time">Sem 4–9</div>
+        </div>
+        <div class="tl-phase mid">
+          <div class="tl-num">F3</div>
+          <div class="tl-name">Autoridad</div>
+          <div class="tl-time">Mes 3–5</div>
+        </div>
+        <div class="tl-phase later">
+          <div class="tl-num">F4</div>
+          <div class="tl-name">Escala</div>
+          <div class="tl-time">Mes 5–8</div>
+        </div>
+        <div class="tl-phase later">
+          <div class="tl-num">F5</div>
+          <div class="tl-name">Sistema</div>
+          <div class="tl-time">Mes 8+</div>
+        </div>
+      </div>
+
+      <div class="phase phase-now" id="p1">
+        <div class="phase-header" onclick="tog('p1')">
+          <div class="ph-num">1</div>
+          <div class="ph-info">
+            <div class="ph-label">Fase 1 · Ahora mismo</div>
+            <div class="ph-title">Cimientos — identidad + correcciones críticas</div>
+          </div>
+          <div class="ph-time">Sem 1–3</div>
+          <div class="ph-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+          <div class="identity-card">
+            <div class="ic-head">
+              <div class="ic-title">Identidad de marca</div>
+              <span class="ic-badge">Urgente · Tú ejecutas</span>
+            </div>
+            <div class="ic-desc">
+              Dirección validada: minimal tipográfico · cálida + premium · paleta nueva desde cero. El nombre porta la carga semántica: <em>Oliva</em> como concepto (equilibrio, presencia, sofisticación contenida) + <em>craft</em> (construcción guiada y acompañada).
+            </div>
+            <div class="ic-attrs">
+              <span class="ic-attr"><strong>Tipo:</strong> Wordmark puro</span>
+              <span class="ic-attr"><strong>Tono:</strong> Serif + Sans</span>
+              <span class="ic-attr"><strong>Paleta:</strong> Azul Noche, Azul Activo, Cian, Frost</span>
+              <span class="ic-attr"><strong>Entregable:</strong> Logo SVG + tokens de color</span>
+              <span class="ic-attr"><strong>Herramienta:</strong> Figma / Illustrator</span>
+            </div>
+          </div>
+
+          <div class="task-group">
+            <div class="tg-label">Correcciones críticas en código</div>
+            <div class="task">
+              <div class="task-dot d-critical"></div>
+              <div class="task-body">
+                <div class="task-title">Typo doble en sección de oferta: "evisión estuctural"</div>
+                <div class="task-desc">index.html ~línea 171. Daña credibilidad directamente en la zona de precios.</div>
+              </div>
+              <div class="task-tag t-critical">Crítico</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-critical"></div>
+              <div class="task-body">
+                <div class="task-title">Selector CSS roto en service switch</div>
+                <div class="task-desc">index.js ~L354: <code style="font-size:11px;background:#EAF3FB;padding:2px 5px;border-radius:3px;color:#0D2B4A;">[data-oferta-features</code> sin corchete de cierre. Feature 1 nunca se actualiza al cambiar servicio.</div>
+              </div>
+              <div class="task-tag t-critical">Crítico</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-critical"></div>
+              <div class="task-body">
+                <div class="task-title">404.html sin header ni footer</div>
+                <div class="task-desc">El usuario queda huérfano sin navegación de retorno al sitio principal.</div>
+              </div>
+              <div class="task-tag t-critical">Crítico</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-critical"></div>
+              <div class="task-body">
+                <div class="task-title">send.php ausente — formulario falla en silencio</div>
+                <div class="task-desc">Reemplazar con Web3Forms o Formspree. Sin backend los mensajes de contacto no llegan.</div>
+              </div>
+              <div class="task-tag t-critical">Crítico</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-critical"></div>
+              <div class="task-body">
+                <div class="task-title">data-contacto-time-text vacío en modo auditoría</div>
+                <div class="task-desc">El objeto <code style="font-size:11px;background:#EAF3FB;padding:2px 5px;border-radius:3px;color:#0D2B4A;">audit</code> en serviceContent no define timeText. El texto puede quedar en blanco al cargar.</div>
+              </div>
+              <div class="task-tag t-critical">Crítico</div>
+            </div>
+          </div>
+
+          <div class="task-group">
+            <div class="tg-label">Infraestructura mínima</div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">Conectar formulario a backend real</div>
+                <div class="task-desc">Web3Forms (gratuito) o Formspree. Testear flujo completo incluyendo Cloudflare Turnstile.</div>
+              </div>
+              <div class="task-tag t-action">Urgente</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">Analytics: Google Analytics 4 o Plausible</div>
+                <div class="task-desc">Plausible recomendado: $9/mes, sin cookies, GDPR-safe. Necesario para medir desde el primer día de tráfico real.</div>
+              </div>
+              <div class="task-tag t-action">Urgente</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">Google Search Console + sitemap.xml + robots.txt</div>
+                <div class="task-desc">Sin estos archivos Google no indexa correctamente. Configurar antes de cualquier acción SEO.</div>
+              </div>
+              <div class="task-tag t-action">Urgente</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase" id="p2">
+        <div class="phase-header" onclick="tog('p2')">
+          <div class="ph-num">2</div>
+          <div class="ph-info">
+            <div class="ph-label">Fase 2 · Semanas 4–9</div>
+            <div class="ph-title">Tracción — primeros clientes reales</div>
+          </div>
+          <div class="ph-time">6 semanas</div>
+          <div class="ph-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+          <div class="task-group">
+            <div class="tg-label">LinkedIn como canal principal (orgánico)</div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">2 posts semanales de fricción detectada</div>
+                <div class="task-desc">Tú defines el insight real. IA redacta, sugiere hooks y adapta el formato. Mayor ROI para B2B en LatAm sin presupuesto.</div>
+              </div>
+              <div class="task-tag t-action">Recurrente</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">1 post semanal de opinión / proceso</div>
+                <div class="task-desc">Posicionamiento como referente UX. Behind-the-scenes cada dos semanas para humanizar la marca.</div>
+              </div>
+              <div class="task-tag t-action">Recurrente</div>
+            </div>
+          </div>
+          <div class="task-group">
+            <div class="tg-label">Outreach directo a pymes</div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">20 pymes identificadas por semana (LinkedIn / Google Maps)</div>
+                <div class="task-desc">Mini-auditoría de 15 min por sitio con IA. Mensaje directo con 1 hallazgo gratuito. No vender en el primer contacto.</div>
+              </div>
+              <div class="task-tag t-action">Activo</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-action"></div>
+              <div class="task-body">
+                <div class="task-title">Tasa esperable: 2–4 respuestas por cada 20 mensajes</div>
+                <div class="task-desc">El cierre ocurre en la segunda interacción. El primer mensaje es para demostrar valor, no para vender.</div>
+              </div>
+              <div class="task-tag t-action">Proceso</div>
+            </div>
+          </div>
+          <div class="task-group">
+            <div class="tg-label">Portafolio público</div>
+            <div class="task">
+              <div class="task-dot d-build"></div>
+              <div class="task-body">
+                <div class="task-title">Actualizar portafolio con casos reales</div>
+                <div class="task-desc">Koyam, Rafcon y primer cliente. Estructura mínima por caso: problema → proceso → resultado medible.</div>
+              </div>
+              <div class="task-tag t-build">Antes del cliente</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase closed" id="p3">
+        <div class="phase-header" onclick="tog('p3')">
+          <div class="ph-num">3</div>
+          <div class="ph-info">
+            <div class="ph-label">Fase 3 · Meses 3–5</div>
+            <div class="ph-title">Autoridad — que te encuentren sin buscarte</div>
+          </div>
+          <div class="ph-time">2–3 meses</div>
+          <div class="ph-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+          <div class="task-group">
+            <div class="tg-label">SEO de contenido</div>
+            <div class="task">
+              <div class="task-dot d-build"></div>
+              <div class="task-body">
+                <div class="task-title">1 artículo semanal (500–900 palabras · IA + criterio propio)</div>
+                <div class="task-desc">Temas: errores UX comunes · cómo auditar X · por qué tu sitio no convierte. Agregar sección /blog o Notion como CMS temporal.</div>
+              </div>
+              <div class="task-tag t-build">Orgánico</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-build"></div>
+              <div class="task-body">
+                <div class="task-title">Keywords de alta intención en LatAm (baja competencia)</div>
+                <div class="task-desc">"auditoría UX pymes Chile" · "cómo saber si mi sitio pierde clientes" · "formulario de contacto no recibe mensajes"</div>
+              </div>
+              <div class="task-tag t-build">SEO</div>
+            </div>
+          </div>
+          <div class="task-group">
+            <div class="tg-label">Casos de estudio y testimonios</div>
+            <div class="task">
+              <div class="task-dot d-build"></div>
+              <div class="task-body">
+                <div class="task-title">1 caso documentado por cliente pagado. Sin excepción.</div>
+                <div class="task-desc">Contexto · hallazgo · solución · resultado. Con 3 casos el sitio empieza a vender solo sin outreach activo.</div>
+              </div>
+              <div class="task-tag t-build">Activo</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-build"></div>
+              <div class="task-body">
+                <div class="task-title">Sección de testimonios en el sitio</div>
+                <div class="task-desc">Ubicar entre Resultados y Contacto. Nombre, empresa, resultado concreto. Foto si es posible.</div>
+              </div>
+              <div class="task-tag t-build">Sitio web</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase closed" id="p4">
+        <div class="phase-header" onclick="tog('p4')">
+          <div class="ph-num">4</div>
+          <div class="ph-info">
+            <div class="ph-label">Fase 4 · Meses 5–8</div>
+            <div class="ph-title">Escala — volumen sin aumentar caos</div>
+          </div>
+          <div class="ph-time">2–3 meses</div>
+          <div class="ph-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+          <div class="task-group">
+            <div class="tg-label">Sistematizar entrega de servicios</div>
+            <div class="task">
+              <div class="task-dot d-plan"></div>
+              <div class="task-body">
+                <div class="task-title">Plantilla reutilizable de informe de auditoría</div>
+                <div class="task-desc">Notion o Figma. Reduce tiempo de entrega por proyecto y mantiene calidad consistente.</div>
+              </div>
+              <div class="task-tag t-plan">Sistema</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-plan"></div>
+              <div class="task-body">
+                <div class="task-title">Formulario de briefing estandarizado para onboarding</div>
+                <div class="task-desc">Elimina idas y vueltas innecesarias al inicio de cada proyecto. Define alcance desde el día 1.</div>
+              </div>
+              <div class="task-tag t-plan">Sistema</div>
+            </div>
+          </div>
+          <div class="task-group">
+            <div class="tg-label">Revisión de precios (con casos + testimonios)</div>
+            <div class="task">
+              <div class="task-dot d-plan"></div>
+              <div class="task-body">
+                <div class="task-title">Estructura escalonada en tres tiers</div>
+                <div class="task-desc">Express $79–99K · Estándar $149–199K · Premium $290–390K CLP. El precio actual de $99K es de entrada — debe subir con evidencia.</div>
+              </div>
+              <div class="task-tag t-plan">Pricing</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-plan"></div>
+              <div class="task-body">
+                <div class="task-title">Segundo canal de adquisición</div>
+                <div class="task-desc">Opciones: Google Ads Search ($150–200 USD/mes mínimo) · Colaboraciones con agencias que no tienen UX interno · Newsletter propia.</div>
+              </div>
+              <div class="task-tag t-plan">Canal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase closed" id="p5">
+        <div class="phase-header" onclick="tog('p5')">
+          <div class="ph-num">5</div>
+          <div class="ph-info">
+            <div class="ph-label">Fase 5 · Mes 8+</div>
+            <div class="ph-title">Sistema — demanda sin intervención constante</div>
+          </div>
+          <div class="ph-time">Ongoing</div>
+          <div class="ph-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+          <div class="task-group">
+            <div class="tg-label">Estado objetivo del negocio</div>
+            <div class="task">
+              <div class="task-dot d-plan"></div>
+              <div class="task-body">
+                <div class="task-title">SEO generando tráfico pasivo semanal constante</div>
+                <div class="task-desc">Casos de estudio cerrando clientes sin pitch activo. El sitio trabaja solo.</div>
+              </div>
+              <div class="task-tag t-plan">Meta</div>
+            </div>
+            <div class="task">
+              <div class="task-dot d-plan"></div>
+              <div class="task-body">
+                <div class="task-title">Agenda con 2–3 semanas de anticipación</div>
+                <div class="task-desc">Punto de decisión estratégica: mantener como estudio personal o escalar con colaboradores externos.</div>
+              </div>
+              <div class="task-tag t-plan">Meta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-n">5</div>
+          <div class="metric-l">fases estructuradas</div>
+        </div>
+        <div class="metric">
+          <div class="metric-n">6–9</div>
+          <div class="metric-l">meses a sistema autónomo</div>
+        </div>
+        <div class="metric">
+          <div class="metric-n">1+IA</div>
+          <div class="metric-l">ritmo sostenible</div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot d-critical"></div> Bug crítico (Rojo)</div>
+        <div class="legend-item"><div class="legend-dot d-action"></div> Acción activa (Azul Activo)</div>
+        <div class="legend-item"><div class="legend-dot d-build"></div> Construcción (Cian)</div>
+        <div class="legend-item"><div class="legend-dot d-plan"></div> Planificación futura (Muted)</div>
+      </div>
     </div>
-  </header>
-
-  <div class="context-callout">
-    <strong>Contexto actual:</strong> 0 clientes activos. Primer cliente potencial la próxima semana — caso ya avanzado, sin interferir con el sitio. Sitio no está en explotación pública. <strong>Urgencia inmediata: identidad de marca</strong> — sin sistema visual coherente no hay credibilidad en el primer entregable.
   </div>
 
-  <div class="timeline">
-    <div class="tl-phase now">
-      <div class="tl-num">F1</div>
-      <div class="tl-name">Cimientos</div>
-      <div class="tl-time">Sem 1–3</div>
-    </div>
-    <div class="tl-phase near">
-      <div class="tl-num">F2</div>
-      <div class="tl-name">Tracción</div>
-      <div class="tl-time">Sem 4–9</div>
-    </div>
-    <div class="tl-phase mid">
-      <div class="tl-num">F3</div>
-      <div class="tl-name">Autoridad</div>
-      <div class="tl-time">Mes 3–5</div>
-    </div>
-    <div class="tl-phase later">
-      <div class="tl-num">F4</div>
-      <div class="tl-name">Escala</div>
-      <div class="tl-time">Mes 5–8</div>
-    </div>
-    <div class="tl-phase later">
-      <div class="tl-num">F5</div>
-      <div class="tl-name">Sistema</div>
-      <div class="tl-time">Mes 8+</div>
+
+  <div id="view-brand" class="view-content">
+    <div class="layout">
+      <nav class="sidebar" id="sidebar">
+        <div class="sb-brand">
+          <div class="sb-wordmark"><em>Oliva</em><span>craft</span><strong>·</strong></div>
+          <div class="sb-version">Brand Manual · v1.0 · 2025</div>
+        </div>
+        <div class="sb-section-label">Fundamentos</div>
+        <a href="#intro" class="sb-link active"><span class="sb-dot"></span>Introducción</a>
+        <a href="#logo" class="sb-link"><span class="sb-dot"></span>Logo y wordmark</a>
+        <a href="#tamanos" class="sb-link"><span class="sb-dot"></span>Tamaños y escala</a>
+        <a href="#color" class="sb-link"><span class="sb-dot"></span>Color</a>
+        <a href="#tipografia" class="sb-link"><span class="sb-dot"></span>Tipografía</a>
+
+        <div class="sb-section-label">Uso correcto</div>
+        <a href="#usos" class="sb-link"><span class="sb-dot"></span>Usos correctos</a>
+        <a href="#nodois" class="sb-link"><span class="sb-dot"></span>Lo que no se hace</a>
+        <a href="#alternativas" class="sb-link"><span class="sb-dot"></span>Alternativas</a>
+
+        <div class="sb-section-label">Voz y tono</div>
+        <a href="#voz" class="sb-link"><span class="sb-dot"></span>Personalidad</a>
+        <a href="#escritura" class="sb-link"><span class="sb-dot"></span>Cómo escribe Olivacraft</a>
+
+        <div class="sb-section-label">Aplicaciones</div>
+        <a href="#sitio" class="sb-link"><span class="sb-dot"></span>Sitio web</a>
+        <a href="#documentos" class="sb-link"><span class="sb-dot"></span>Documentos</a>
+        <a href="#email" class="sb-link"><span class="sb-dot"></span>Email y firma</a>
+        <a href="#social" class="sb-link"><span class="sb-dot"></span>Redes sociales</a>
+        
+        <div class="sb-footer">
+          olivacraft.com<br>
+          Uso interno — confidencial
+        </div>
+      </nav>
+
+      <main class="main">
+        <div class="cover">
+          <div class="cover-wordmark"><em>Oliva</em><span>craft</span><sup>·</sup></div>
+          <div class="cover-tagline">Brand Manual — Identidad visual, voz y aplicaciones</div>
+          <div class="cover-meta">
+            <div class="cover-meta-item">
+              <div class="cover-meta-label">Versión</div>
+              <div class="cover-meta-value">1.0 — 2025</div>
+            </div>
+            <div class="cover-meta-item">
+              <div class="cover-meta-label">Alcance</div>
+              <div class="cover-meta-value">Identidad · Voz · Aplicaciones</div>
+            </div>
+            <div class="cover-meta-item">
+              <div class="cover-meta-label">Uso</div>
+              <div class="cover-meta-value">Interno — colaboradores y proveedores</div>
+            </div>
+            <div class="cover-meta-item">
+              <div class="cover-meta-label">Contacto</div>
+              <div class="cover-meta-value">contacto@olivacraft.com</div>
+            </div>
+          </div>
+        </div>
+
+        <section class="section" id="intro">
+          <div class="section-header">
+            <span class="section-num">01</span>
+            <h2 class="section-title">Introducción</h2>
+          </div>
+          <div class="g2" style="gap:2px;margin-bottom:2px;">
+            <div class="card">
+              <div class="card-head">Por qué existe Olivacraft</div>
+              <div class="card-body">
+                <p style="font-size:14px;line-height:1.7;color:var(--ink-soft);margin-bottom:1rem;">Olivacraft nace para eliminar el dolor más común que generan las agencias: el cliente nunca sabe qué está pasando, con quién habla, ni por qué se tomó cada decisión.</p>
+                <p style="font-size:14px;line-height:1.7;color:var(--ink-soft);">Somos un estudio de diseño UX/UI que pone el proceso en el centro. El cliente no es un destinatario del resultado — es un participante activo en cada etapa.</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head">Significado del nombre</div>
+              <div class="card-body">
+                <div style="margin-bottom:1rem;">
+                  <div style="font-family:var(--font-display);font-size:22px;font-style:italic;color:var(--blue);margin-bottom:6px;">Oliva</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Concepto, no vegetal. Adaptación, equilibrio, presencia calmada. La capacidad de acompañar sin imponer.</p>
+                </div>
+                <div>
+                  <div style="font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--night);margin-bottom:6px;">craft·</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Construcción guiada. Lo que se hace con método, criterio y atención al detalle. No decoración — proceso.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Los tres pilares de la marca</div>
+            <div class="card-body">
+              <div class="g3" style="gap:1.5rem;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">Transparencia</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">El cliente sabe qué pasa, qué se está haciendo y con quién habla. Sin letra chica, sin silencios. La claridad es el producto.</p>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">Acompañamiento</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">No somos proveedores que entregan un archivo. Somos compañeros de proceso que educan, explican y guían en cada etapa.</p>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">Criterio</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Cada decisión tiene una razón. No hacemos lo que el cliente pide — hacemos lo que el cliente necesita, y explicamos la diferencia.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="logo">
+          <div class="section-header">
+            <span class="section-num">02</span>
+            <h2 class="section-title">Logo y wordmark</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Wordmark principal — uso general</div>
+            <div class="card-body">
+              <div style="background:#F2F8FD;border-radius:10px;padding:3rem 2.5rem;margin-bottom:1rem;display:flex;flex-direction:column;align-items:flex-start;gap:12px;">
+                <div style="display:flex;align-items:baseline;">
+                  <span style="font-family:var(--font-display);font-size:60px;font-style:italic;font-weight:300;color:var(--night);letter-spacing:-0.025em;font-variation-settings:'opsz' 9;line-height:1;">Oliva</span><span style="font-family:var(--font-display);font-size:60px;font-weight:600;color:var(--night);letter-spacing:-0.025em;font-variation-settings:'opsz' 9;line-height:1;">craft</span><span style="font-family:var(--font-display);font-size:66px;font-weight:700;color:var(--blue);line-height:1;margin-left:2px;position:relative;top:-4px;">·</span>
+                </div>
+                <div style="font-family:var(--font-body);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);">Diseño con proceso</div>
+              </div>
+              <div class="g3" style="gap:1rem;">
+                <div>
+                  <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;">Oliva</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">Fraunces Italic 300. Comunica el concepto blando, adaptable, cercano de la marca.</p>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;">craft</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">Fraunces Roman 600. Ancla el wordmark. Comunica solidez, método, construcción.</p>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;">El punto ·</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">Fraunces Bold 700 en azul activo. No es decoración — es el acento tipográfico que distingue la marca.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="g2" style="margin-bottom:2px;">
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#0D2B4A;">
+                <div class="wm-text">
+                  <span style="font-family:var(--font-display);font-size:42px;font-style:italic;font-weight:300;color:var(--cyan);letter-spacing:-0.025em;font-variation-settings:'opsz' 9;">Oliva</span><span style="font-family:var(--font-display);font-size:42px;font-weight:600;color:#fff;letter-spacing:-0.025em;font-variation-settings:'opsz' 9;">craft</span><span style="font-family:var(--font-display);font-size:46px;font-weight:700;color:var(--cyan);position:relative;top:-3px;margin-left:2px;">·</span>
+                </div>
+                <div class="wm-tagline-preview" style="color:rgba(255,255,255,0.35);">Diseño con proceso</div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Versión oscura</div>
+                <div class="wm-meta-desc">Header del sitio. Oliva y punto en cian, craft en blanco.</div>
+              </div>
+            </div>
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#0A7EC2;">
+                <div class="wm-text">
+                  <span style="font-family:var(--font-display);font-size:42px;font-style:italic;font-weight:300;color:rgba(255,255,255,0.88);letter-spacing:-0.025em;font-variation-settings:'opsz' 9;">Oliva</span><span style="font-family:var(--font-display);font-size:42px;font-weight:600;color:#fff;letter-spacing:-0.025em;font-variation-settings:'opsz' 9;">craft</span><span style="font-family:var(--font-display);font-size:46px;font-weight:700;color:#fff;position:relative;top:-3px;margin-left:2px;">·</span>
+                </div>
+                <div class="wm-tagline-preview" style="color:rgba(255,255,255,0.45);">Diseño con proceso</div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Versión azul activo</div>
+                <div class="wm-meta-desc">Banners y piezas de comunicación. Todo en blanco.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="g2">
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#ffffff;border:0.5px solid var(--border);">
+                <div class="wm-text">
+                  <span style="font-family:var(--font-display);font-size:42px;font-style:italic;font-weight:300;color:var(--night);letter-spacing:-0.025em;font-variation-settings:'opsz' 9;">Oliva</span><span style="font-family:var(--font-display);font-size:42px;font-weight:600;color:var(--night);letter-spacing:-0.025em;font-variation-settings:'opsz' 9;">craft</span><span style="font-family:var(--font-display);font-size:46px;font-weight:700;color:var(--blue);position:relative;top:-3px;margin-left:2px;">·</span>
+                </div>
+                <div class="wm-tagline-preview" style="color:var(--ink-muted);">Diseño con proceso</div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Versión blanca</div>
+                <div class="wm-meta-desc">Documentos, PDFs, propuestas. Fondo blanco puro.</div>
+              </div>
+            </div>
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#F2F8FD;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:44px;height:44px;border-radius:50%;background:var(--night);border:1.5px solid #1E4A7A;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <div style="text-align:center;line-height:1.1;">
+                      <div style="font-family:var(--font-display);font-size:10px;font-style:italic;font-weight:300;font-variation-settings:'opsz' 9;color:var(--cyan);">Oliva</div>
+                      <div style="font-family:var(--font-display);font-size:11px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-top:-1px;">craft<span style="color:var(--cyan);">·</span></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size:13px;font-weight:500;color:var(--night);">Olivacraft</div>
+                    <div style="font-size:11px;color:var(--ink-muted);">Diseño UX/UI · Santiago, Chile</div>
+                  </div>
+                </div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Avatar reducido</div>
+                <div class="wm-meta-desc">LinkedIn, email, Slack. Wordmark en círculo oscuro.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tamanos">
+          <div class="section-header">
+            <span class="section-num">03</span>
+            <h2 class="section-title">Tamaños y escala</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Escala del wordmark — tamaños mínimos y máximos</div>
+            <div class="card-body">
+              <div class="size-row">
+                <div class="size-preview">
+                  <div style="display:flex;align-items:baseline;">
+                    <span style="font-family:var(--font-display);font-size:14px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:14px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--blue);position:relative;top:-1px;">·</span>
+                  </div>
+                </div>
+                <span class="size-label">14px</span>
+                <span class="size-rule">Tamaño absoluto mínimo en digital. Solo para contextos muy restringidos como footers o meta-información. El punto comienza a perderse.</span>
+                <span class="size-badge badge-warn">Límite inferior</span>
+              </div>
+              <div class="size-row">
+                <div class="size-preview">
+                  <div style="display:flex;align-items:baseline;">
+                    <span style="font-family:var(--font-display);font-size:20px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--blue);position:relative;top:-1px;margin-left:1px;">·</span>
+                  </div>
+                </div>
+                <span class="size-label">20px</span>
+                <span class="size-rule">Tamaño mínimo recomendado. Header del sitio en mobile, firma de documentos.</span>
+                <span class="size-badge badge-ok">Mínimo recomendado</span>
+              </div>
+              <div class="size-row">
+                <div class="size-preview">
+                  <div style="display:flex;align-items:baseline;">
+                    <span style="font-family:var(--font-display);font-size:28px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:31px;font-weight:700;color:var(--blue);position:relative;top:-2px;margin-left:1px;">·</span>
+                  </div>
+                </div>
+                <span class="size-label">28px</span>
+                <span class="size-rule">Header desktop, portadas de documentos. Tamaño de uso más frecuente.</span>
+                <span class="size-badge badge-ok">Uso frecuente</span>
+              </div>
+              <div class="size-row">
+                <div class="size-preview">
+                  <div style="display:flex;align-items:baseline;">
+                    <span style="font-family:var(--font-display);font-size:42px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:42px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:46px;font-weight:700;color:var(--blue);position:relative;top:-3px;margin-left:2px;">·</span>
+                  </div>
+                </div>
+                <span class="size-label">42px</span>
+                <span class="size-rule">Hero de presentaciones, portadas de propuestas, banners. Máximo expresivo.</span>
+                <span class="size-badge badge-ok">Display</span>
+              </div>
+              <div class="size-row">
+                <div class="size-preview">
+                  <span style="font-size:12px;color:var(--ink-faint);">60px+</span>
+                </div>
+                <span class="size-label">60px+</span>
+                <span class="size-rule">Solo para piezas de marca de gran formato (posters, presentaciones de pantalla completa). No usar en interfaz de producto.</span>
+                <span class="size-badge badge-warn">Solo gran formato</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Área de protección — espacio mínimo alrededor del wordmark</div>
+            <div class="card-body">
+              <div style="background:var(--surface);border-radius:10px;padding:2rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                <div style="position:relative;display:inline-block;">
+                  <div style="position:absolute;inset:-20px;border:1.5px dashed var(--cyan);border-radius:6px;opacity:0.5;"></div>
+                  <div style="display:flex;align-items:baseline;">
+                    <span style="font-family:var(--font-display);font-size:32px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:32px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:35px;font-weight:700;color:var(--blue);position:relative;top:-2px;margin-left:1px;">·</span>
+                  </div>
+                </div>
+              </div>
+              <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">El área de protección mínima es igual a la altura de la letra "O" del wordmark en todos los lados. Ningún otro elemento visual debe entrar en esa zona.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="color">
+          <div class="section-header">
+            <span class="section-num">04</span>
+            <h2 class="section-title">Color</h2>
+          </div>
+          <div class="g4" style="margin-bottom:2px;">
+            <div class="color-token">
+              <div class="color-swatch" style="background:#0D2B4A;"></div>
+              <div class="color-info">
+                <div class="color-name">Azul noche</div>
+                <div class="color-hex">#0D2B4A</div>
+                <div class="color-role">Textos principales, fondos oscuros, craft en wordmark</div>
+              </div>
+            </div>
+            <div class="color-token">
+              <div class="color-swatch" style="background:#0A7EC2;"></div>
+              <div class="color-info">
+                <div class="color-name">Azul activo</div>
+                <div class="color-hex">#0A7EC2</div>
+                <div class="color-role">Acento principal, CTAs, punto del wordmark, links</div>
+              </div>
+            </div>
+            <div class="color-token">
+              <div class="color-swatch" style="background:#3EC6D4;"></div>
+              <div class="color-info">
+                <div class="color-name">Cian apoyo</div>
+                <div class="color-hex">#3EC6D4</div>
+                <div class="color-role">Oliva sobre oscuro, detalles, iconografía sobre dark</div>
+              </div>
+            </div>
+            <div class="color-token">
+              <div class="color-swatch" style="background:#F2F8FD;border-bottom:0.5px solid var(--border);"></div>
+              <div class="color-info">
+                <div class="color-name">Blanco frío</div>
+                <div class="color-hex">#F2F8FD</div>
+                <div class="color-role">Fondo principal del sitio y documentos</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Reglas de combinación cromática</div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+                <div>
+                  <div style="display:flex;gap:6px;margin-bottom:8px;">
+                    <div style="width:28px;height:28px;border-radius:6px;background:#0D2B4A;flex-shrink:0;"></div>
+                    <div style="width:28px;height:28px;border-radius:6px;background:#3EC6D4;flex-shrink:0;"></div>
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px;">Noche + Cian</div>
+                  <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;">Combinación principal del header y versión oscura del wordmark.</p>
+                </div>
+                <div>
+                  <div style="display:flex;gap:6px;margin-bottom:8px;">
+                    <div style="width:28px;height:28px;border-radius:6px;background:#F2F8FD;border:0.5px solid var(--border);flex-shrink:0;"></div>
+                    <div style="width:28px;height:28px;border-radius:6px;background:#0A7EC2;flex-shrink:0;"></div>
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px;">Frost + Azul activo</div>
+                  <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;">Combinación principal del cuerpo del sitio y documentos en blanco.</p>
+                </div>
+                <div>
+                  <div style="display:flex;gap:6px;margin-bottom:8px;">
+                    <div style="width:28px;height:28px;border-radius:6px;background:#0A7EC2;flex-shrink:0;"></div>
+                    <div style="width:28px;height:28px;border-radius:6px;background:#fff;border:0.5px solid var(--border);flex-shrink:0;"></div>
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px;">Azul + Blanco</div>
+                  <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;">Para botones, banners y piezas de comunicación de alto contraste.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Accesibilidad — ratios de contraste WCAG 2.1</div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+                <div style="background:#0D2B4A;border-radius:8px;padding:1rem;">
+                  <div style="font-size:13px;font-weight:500;color:#fff;margin-bottom:4px;">Texto sobre noche</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.55);">Blanco sobre #0D2B4A</div>
+                  <div style="font-size:18px;font-weight:600;color:#3EC6D4;margin-top:8px;">14.2:1</div>
+                  <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;">AAA — Óptimo</div>
+                </div>
+                <div style="background:#0A7EC2;border-radius:8px;padding:1rem;">
+                  <div style="font-size:13px;font-weight:500;color:#fff;margin-bottom:4px;">Texto sobre azul</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.6);">Blanco sobre #0A7EC2</div>
+                  <div style="font-size:18px;font-weight:600;color:#fff;margin-top:8px;">4.8:1</div>
+                  <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">AA — Aprobado</div>
+                </div>
+                <div style="background:#F2F8FD;border:0.5px solid var(--border);border-radius:8px;padding:1rem;">
+                  <div style="font-size:13px;font-weight:500;color:var(--night);margin-bottom:4px;">Texto sobre frost</div>
+                  <div style="font-size:11px;color:var(--ink-muted);">#0D2B4A sobre #F2F8FD</div>
+                  <div style="font-size:18px;font-weight:600;color:var(--blue);margin-top:8px;">11.8:1</div>
+                  <div style="font-size:10px;color:var(--ink-faint);margin-top:2px;">AAA — Óptimo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tipografia">
+          <div class="section-header">
+            <span class="section-num">05</span>
+            <h2 class="section-title">Tipografía</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Sistema tipográfico — dos familias, roles definidos</div>
+            <div class="card-body">
+              <div class="type-row">
+                <div class="type-sample">
+                  <div style="font-family:var(--font-display);font-size:36px;font-style:italic;font-weight:300;color:var(--night);line-height:1.1;letter-spacing:-0.02em;">Diseño que acompaña.</div>
+                </div>
+                <div class="type-spec">Fraunces · Italic 300 · opsz 9<br>H1 · Display principal<br>Solo títulos de impacto</div>
+              </div>
+              <div class="type-row">
+                <div class="type-sample">
+                  <div style="font-family:var(--font-display);font-size:26px;font-weight:500;color:var(--night);line-height:1.2;letter-spacing:-0.02em;">Claridad en cada etapa del proceso</div>
+                </div>
+                <div class="type-spec">Fraunces · Roman 600 · opsz 9<br>H2 · Títulos de sección<br>Subtítulos de documentos</div>
+              </div>
+              <div class="type-row">
+                <div class="type-sample">
+                  <div style="font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--night);line-height:1.3;letter-spacing:-0.01em;">Revisión estructural y de flujo</div>
+                </div>
+                <div class="type-spec">Fraunces · Roman 400 · opsz 9<br>H3 · Títulos de tarjetas<br>Subtítulos de sección</div>
+              </div>
+              <div class="type-row">
+                <div class="type-sample">
+                  <div style="font-family:var(--font-body);font-size:15px;font-weight:400;color:var(--ink);line-height:1.7;">Sabés qué pasa, qué se está haciendo y con quién hablás. Sin letra chica, sin silencios intermedios. La claridad no es un extra — es parte del servicio.</div>
+                </div>
+                <div class="type-spec">Plus Jakarta Sans · 400<br>Body · Cuerpo de texto<br>Line-height: 1.7</div>
+              </div>
+              <div class="type-row">
+                <div class="type-sample">
+                  <div style="font-family:var(--font-body);font-size:13px;font-weight:400;color:var(--ink-soft);line-height:1.6;">Detección de fricción · Informe de auditoría · Plan priorizado por impacto</div>
+                </div>
+                <div class="type-spec">Plus Jakarta Sans · 400<br>Small · Descripciones<br>Metadatos y fechas</div>
+              </div>
+              <div class="type-row">
+                <div class="type-sample">
+                  <div style="font-family:var(--font-body);font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);">Auditoría · Diseño · Proceso</div>
+                </div>
+                <div class="type-spec">Plus Jakarta Sans · 600<br>Label · Eyebrows y tags<br>Letter-spacing: 0.1em</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Reglas tipográficas</div>
+            <div class="card-body">
+              <div class="checklist">
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Fraunces solo para identidad y display.</strong> El wordmark, los H1 y H2 del sitio, y los títulos de portadas de documentos. Nunca para cuerpo de texto.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Plus Jakarta Sans para todo lo funcional.</strong> Navegación, botones, formularios, body, labels, eyebrows, metadatos. Es la tipografía del producto.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>No usar otras fuentes.</strong> Inter, Roboto, Open Sans y similares están fuera del sistema. Si Fraunces no carga, fallback a Georgia. Si Plus Jakarta Sans no carga, fallback a system-ui.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>No usar más de dos pesos en una misma pieza.</strong> Para documentos: 400 regular + 500 medium. Para el sitio: 300/400 cuerpo + 500/600 UI.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="usos">
+          <div class="section-header">
+            <span class="section-num">06</span>
+            <h2 class="section-title">Usos correctos</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Contextos de uso aprobados</div>
+            <div class="card-body">
+              <div class="g3" style="gap:1rem;">
+                <div>
+                  <div style="width:100%;height:4px;background:var(--blue);border-radius:2px;margin-bottom:10px;"></div>
+                  <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px;">Sitio web</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Wordmark completo en header. Versión oscura sobre fondo #0D2B4A. Versión clara sobre #F2F8FD en el resto del sitio.</p>
+                </div>
+                <div>
+                  <div style="width:100%;height:4px;background:var(--blue);border-radius:2px;margin-bottom:10px;"></div>
+                  <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px;">Documentos y propuestas</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Wordmark versión blanca en el encabezado. Sello circular en esquina inferior o portada. Nunca sobre fondos con bajo contraste.</p>
+                </div>
+                <div>
+                  <div style="width:100%;height:4px;background:var(--blue);border-radius:2px;margin-bottom:10px;"></div>
+                  <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px;">Redes y email</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Avatar con wordmark reducido en círculo oscuro. Firma de email con wordmark + nombre + cargo + web. No usar el punto solo como avatar.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="do-dont">
+            <div class="do-card">
+              <div class="do-head yes">Correcto — hacer esto</div>
+              <div class="do-body">
+                <div class="do-item">Usar el wordmark completo en todos los contextos principales.</div>
+                <div class="do-item">Mantener la relación itálica/roman entre Oliva y craft.</div>
+                <div class="do-item">Respetar el área de protección mínima alrededor del wordmark.</div>
+                <div class="do-item">Usar el punto siempre en azul activo (#0A7EC2) sobre fondos claros.</div>
+                <div class="do-item">Usar el punto en cian (#3EC6D4) sobre fondos oscuros.</div>
+                <div class="do-item">Descargar Fraunces desde Google Fonts antes de crear cualquier pieza.</div>
+                <div class="do-item">Aplicar la tagline "Diseño con proceso" como elemento de apoyo cuando el espacio lo permite.</div>
+              </div>
+            </div>
+            <div class="dont-card">
+              <div class="do-head no">Incorrecto — nunca hacer esto</div>
+              <div class="do-body">
+                <div class="do-item">Cambiar los pesos tipográficos del wordmark.</div>
+                <div class="do-item">Usar el punto en otro color que no sea azul activo o cian.</div>
+                <div class="do-item">Colocar el wordmark sobre fondos con bajo contraste o fotografías sin overlay.</div>
+                <div class="do-item">Deformar, rotar, estirar o comprimir el wordmark.</div>
+                <div class="do-item">Separar "Oliva" de "craft" como si fueran palabras independientes.</div>
+                <div class="do-item">Usar el punto · como símbolo autónomo sin contexto de texto.</div>
+                <div class="do-item">Recrear el wordmark con otras fuentes o aproximaciones visuales.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="nodois">
+          <div class="section-header">
+            <span class="section-num">07</span>
+            <h2 class="section-title">Lo que no se hace</h2>
+          </div>
+          <div class="card">
+            <div class="card-head">Errores críticos de identidad</div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div style="border:0.5px solid #FDECEC;border-radius:8px;overflow:hidden;">
+                  <div style="padding:1.25rem;background:#FFFAFA;display:flex;align-items:center;justify-content:center;min-height:80px;">
+                    <div style="display:flex;align-items:baseline;filter:hue-rotate(120deg);">
+                      <span style="font-family:var(--font-display);font-size:28px;font-style:italic;color:green;">Oliva</span><span style="font-family:var(--font-display);font-size:28px;font-weight:500;color:green;">craft</span><span style="font-family:var(--font-display);font-size:31px;font-weight:700;color:green;position:relative;top:-2px;">·</span>
+                    </div>
+                  </div>
+                  <div style="padding:8px 12px;background:#FDECEC;">
+                    <div style="font-size:10px;font-weight:600;color:#8B1A1A;letter-spacing:0.07em;text-transform:uppercase;">No — color incorrecto</div>
+                    <div style="font-size:11px;color:#A03030;margin-top:2px;">El wordmark no se aplica en colores fuera del sistema definido.</div>
+                  </div>
+                </div>
+
+                <div style="border:0.5px solid #FDECEC;border-radius:8px;overflow:hidden;">
+                  <div style="padding:1.25rem;background:#FFFAFA;display:flex;align-items:center;justify-content:center;min-height:80px;">
+                    <div style="display:flex;align-items:baseline;transform:scaleX(1.4);transform-origin:left;">
+                      <span style="font-family:var(--font-display);font-size:28px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:31px;font-weight:700;color:var(--blue);position:relative;top:-2px;">·</span>
+                    </div>
+                  </div>
+                  <div style="padding:8px 12px;background:#FDECEC;">
+                    <div style="font-size:10px;font-weight:600;color:#8B1A1A;letter-spacing:0.07em;text-transform:uppercase;">No — deformado</div>
+                    <div style="font-size:11px;color:#A03030;margin-top:2px;">No escalar de forma no proporcional. Siempre mantener el ratio original.</div>
+                  </div>
+                </div>
+
+                <div style="border:0.5px solid #FDECEC;border-radius:8px;overflow:hidden;">
+                  <div style="padding:1.25rem;background:#888;display:flex;align-items:center;justify-content:center;min-height:80px;">
+                    <div style="display:flex;align-items:baseline;">
+                      <span style="font-family:var(--font-display);font-size:28px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:31px;font-weight:700;color:var(--blue);position:relative;top:-2px;">·</span>
+                    </div>
+                  </div>
+                  <div style="padding:8px 12px;background:#FDECEC;">
+                    <div style="font-size:10px;font-weight:600;color:#8B1A1A;letter-spacing:0.07em;text-transform:uppercase;">No — bajo contraste</div>
+                    <div style="font-size:11px;color:#A03030;margin-top:2px;">No usar la versión oscura sobre fondos grises o de color intermedio.</div>
+                  </div>
+                </div>
+
+                <div style="border:0.5px solid #FDECEC;border-radius:8px;overflow:hidden;">
+                  <div style="padding:1.25rem;background:#FFFAFA;display:flex;align-items:center;justify-content:center;min-height:80px;">
+                    <div>
+                      <div style="font-family:'Arial',sans-serif;font-size:28px;font-style:italic;color:var(--night);">Oliva</div>
+                      <div style="font-family:'Arial',sans-serif;font-size:28px;font-weight:700;color:var(--night);">craft·</div>
+                    </div>
+                  </div>
+                  <div style="padding:8px 12px;background:#FDECEC;">
+                    <div style="font-size:10px;font-weight:600;color:#8B1A1A;letter-spacing:0.07em;text-transform:uppercase;">No — fuente incorrecta</div>
+                    <div style="font-size:11px;color:#A03030;margin-top:2px;">No recrear el wordmark con Arial, Helvetica u otras fuentes del sistema.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="alternativas">
+          <div class="section-header">
+            <span class="section-num">08</span>
+            <h2 class="section-title">Alternativas de uso</h2>
+          </div>
+          <div class="g2" style="margin-bottom:2px;">
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#F2F8FD;justify-content:center;align-items:center;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <div style="display:flex;align-items:baseline;">
+                    <span style="font-family:var(--font-display);font-size:32px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:32px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:35px;font-weight:700;color:var(--blue);position:relative;top:-2px;margin-left:1px;">·</span>
+                  </div>
+                  <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);font-family:var(--font-body);">Diseño con proceso</div>
+                </div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Con tagline — versión completa</div>
+                <div class="wm-meta-desc">Para portadas, presentaciones y piezas donde hay espacio. La tagline nunca va sola sin el wordmark.</div>
+              </div>
+            </div>
+
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#F2F8FD;justify-content:center;align-items:center;">
+                <div style="display:flex;align-items:baseline;">
+                  <span style="font-family:var(--font-display);font-size:32px;font-style:italic;color:var(--night);">Oliva</span><span style="font-family:var(--font-display);font-size:32px;font-weight:500;color:var(--night);">craft</span><span style="font-family:var(--font-display);font-size:35px;font-weight:700;color:var(--blue);position:relative;top:-2px;margin-left:1px;">·</span>
+                </div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Sin tagline — versión compacta</div>
+                <div class="wm-meta-desc">Para headers, navegación y espacios reducidos. Es la versión de uso más frecuente.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="g3" style="margin-bottom:2px;">
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#0D2B4A;justify-content:center;align-items:center;min-height:90px;">
+                <div style="display:flex;align-items:baseline;">
+                  <span style="font-family:var(--font-display);font-size:22px;font-style:italic;color:var(--cyan);">Oliva</span><span style="font-family:var(--font-display);font-size:22px;font-weight:500;color:#fff;">craft</span><span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--cyan);position:relative;top:-2px;margin-left:1px;">·</span>
+                </div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Compacta oscura</div>
+                <div class="wm-meta-desc">Header mobile, pie de página oscuro.</div>
+              </div>
+            </div>
+
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#F2F8FD;justify-content:center;align-items:center;min-height:90px;">
+                <div>
+                  <div style="font-family:var(--font-display);font-size:12px;font-style:italic;color:var(--blue);line-height:1;letter-spacing:0.01em;">Oliva</div>
+                  <div style="display:flex;align-items:center;gap:5px;">
+                    <div style="width:16px;height:1.5px;background:var(--cyan);"></div>
+                    <div style="font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--night);letter-spacing:-0.03em;line-height:1.1;">craft<span style="color:var(--blue);font-size:20px;position:relative;top:-1px;">·</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Apilada — alternativa editorial</div>
+                <div class="wm-meta-desc">Tarjetas de visita, sellos, espacios cuadrados.</div>
+              </div>
+            </div>
+
+            <div class="wm-box">
+              <div class="wm-preview" style="background:#F2F8FD;justify-content:center;align-items:center;min-height:90px;">
+                <div style="width:52px;height:52px;border-radius:50%;border:1.5px solid var(--blue);display:flex;align-items:center;justify-content:center;background:#fff;">
+                  <span style="font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--blue);line-height:1;position:relative;top:-2px;">·</span>
+                </div>
+              </div>
+              <div class="wm-meta">
+                <div class="wm-meta-title">Sello circular</div>
+                <div class="wm-meta-desc">Solo en documentos, nunca como avatar. Requiere texto de apoyo cercano.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Favicon — versiones aprobadas</div>
+            <div class="card-body">
+              <div style="display:flex;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div style="width:32px;height:32px;border-radius:6px;background:var(--night);display:flex;align-items:center;justify-content:center;">
+                    <span style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--cyan);line-height:1;position:relative;top:-1px;">·</span>
+                  </div>
+                  <span style="font-size:10px;color:var(--ink-faint);">32×32</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div style="width:16px;height:16px;border-radius:3px;background:var(--night);display:flex;align-items:center;justify-content:center;">
+                    <span style="font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--cyan);line-height:1;position:relative;top:-1px;">·</span>
+                  </div>
+                  <span style="font-size:10px;color:var(--ink-faint);">16×16</span>
+                </div>
+                <div style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;max-width:320px;">Fondo azul noche (#0D2B4A) con punto cian (#3EC6D4). Radio: 6px para 32px, 3px para 16px. Es el único contexto donde el punto funciona como símbolo autónomo sin texto de apoyo.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="voz">
+          <div class="section-header">
+            <span class="section-num">09</span>
+            <h2 class="section-title">Personalidad de marca</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Cómo se percibe Olivacraft</div>
+            <div class="card-body">
+              <div class="g3" style="gap:1.5rem;">
+                <div>
+                  <div style="font-size:24px;font-family:var(--font-display);font-style:italic;color:var(--blue);margin-bottom:8px;">Cercano</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Habla como una persona, no como una empresa. Usa primera persona. Trata al cliente de igual a igual — no como un jefe ni como un alumno.</p>
+                </div>
+                <div>
+                  <div style="font-size:24px;font-family:var(--font-display);font-style:italic;color:var(--blue);margin-bottom:8px;">Claro</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Sin jerga innecesaria. Si hay que usar un término técnico, se explica. Las oraciones son cortas. Las ideas van de una en una.</p>
+                </div>
+                <div>
+                  <div style="font-size:24px;font-family:var(--font-display);font-style:italic;color:var(--blue);margin-bottom:8px;">Con criterio</div>
+                  <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">No somos neutrales ni asépticos. Tenemos una postura. Recomendamos, cuestionamos y explicamos por qué. El criterio es parte del servicio.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Olivacraft NO es</div>
+            <div class="card-body">
+              <div class="g3" style="gap:1rem;">
+                <div style="padding:1rem;background:var(--surface);border-radius:8px;">
+                  <div style="font-size:11px;font-weight:600;color:#8B1A1A;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">No es una agencia opaca</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">No desaparece entre entrega y entrega. No guarda silencio. El proceso es visible siempre.</p>
+                </div>
+                <div style="padding:1rem;background:var(--surface);border-radius:8px;">
+                  <div style="font-size:11px;font-weight:600;color:#8B1A1A;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">No es condescendiente</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">No explica lo obvio ni trata al cliente como si no supiera nada. La educación es horizontal.</p>
+                </div>
+                <div style="padding:1rem;background:var(--surface);border-radius:8px;">
+                  <div style="font-size:11px;font-weight:600;color:#8B1A1A;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">No es genérica</div>
+                  <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">No usa frases vacías como "soluciones innovadoras" o "experiencia única". Todo lo que se dice es concreto y verificable.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="escritura">
+          <div class="section-header">
+            <span class="section-num">10</span>
+            <h2 class="section-title">Cómo escribe Olivacraft</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Principios de escritura</div>
+            <div class="card-body">
+              <div class="checklist">
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Oraciones cortas.</strong> Una idea por oración. Si hay que leer dos veces, es demasiado larga.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Primera persona del singular.</strong> "Detecto", "analizo", "te muestro". No "nosotros detectamos" ni "el equipo analiza".</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Verbos activos.</strong> "Identifico los puntos de fricción" en lugar de "los puntos de fricción son identificados".</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>Sin jerga de agencia.</strong> Prohibido: "entregables", "sinergia", "soluciones disruptivas", "ecosistema digital", "potenciar la experiencia".</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>Sin promesas vacías.</strong> No decir "garantizamos resultados" ni "maximizamos el ROI". Sí decir qué se hace exactamente y cómo.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:2px;">
+            <div class="voice-example">
+              <div class="ve-label bad">No escribir así</div>
+              <div class="ve-text bad">"Potenciamos la experiencia digital de tu negocio a través de soluciones UX estratégicas orientadas a maximizar la conversión y el engagement del usuario final."</div>
+            </div>
+            <div class="voice-example">
+              <div class="ve-label good">Sí escribir así</div>
+              <div class="ve-text">"Reviso tu sitio y te digo exactamente qué está frenando que los visitantes te contacten. Sin rodeos."</div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:2px;">
+            <div class="voice-example">
+              <div class="ve-label bad">No escribir así</div>
+              <div class="ve-text bad">"Nuestro equipo de expertos diseñadores UX/UI aplica metodologías ágiles y best practices de la industria para garantizar una experiencia óptima."</div>
+            </div>
+            <div class="voice-example">
+              <div class="ve-label good">Sí escribir así</div>
+              <div class="ve-text">"Trabajo solo, con método claro. Sabés qué pasa en cada etapa porque te lo cuento a medida que avanza."</div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <div class="voice-example">
+              <div class="ve-label bad">No escribir así</div>
+              <div class="ve-text bad">"¿Tiene dudas sobre cómo podemos ayudarle? Contáctenos y uno de nuestros asesores se comunicará con usted."</div>
+            </div>
+            <div class="voice-example">
+              <div class="ve-label good">Sí escribir así</div>
+              <div class="ve-text">"¿Tenés preguntas? Escribime directamente. Te respondo en menos de 12 horas."</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="sitio">
+          <div class="section-header">
+            <span class="section-num">11</span>
+            <h2 class="section-title">Sitio web</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Header — versión desktop</div>
+            <div class="card-body" style="padding:0;">
+              <div style="background:var(--night);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-radius:8px 8px 0 0;">
+                <div style="display:flex;align-items:baseline;">
+                  <span style="font-family:var(--font-display);font-size:20px;font-style:italic;color:var(--cyan);letter-spacing:-0.02em;">Oliva</span><span style="font-family:var(--font-display);font-size:20px;font-weight:500;color:#fff;letter-spacing:-0.02em;">craft</span><span style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--cyan);position:relative;top:-1px;margin-left:1px;">·</span>
+                </div>
+                <div style="display:flex;gap:1.5rem;">
+                  <span style="font-size:12px;color:rgba(255,255,255,0.5);font-family:var(--font-body);">Servicio</span>
+                  <span style="font-size:12px;color:rgba(255,255,255,0.5);font-family:var(--font-body);">Resultados</span>
+                  <span style="font-size:12px;color:rgba(255,255,255,0.5);font-family:var(--font-body);">Sobre mí</span>
+                  <span style="font-size:12px;color:rgba(255,255,255,0.5);font-family:var(--font-body);">Contacto</span>
+                </div>
+                <div style="font-size:11px;font-weight:500;padding:6px 14px;border-radius:999px;background:var(--blue);color:#fff;font-family:var(--font-body);">Solicitar diagnóstico</div>
+              </div>
+              <div style="padding:1rem 1.5rem;background:var(--surface);border-radius:0 0 8px 8px;">
+                <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;">El header siempre usa fondo azul noche (#0D2B4A). El wordmark en versión cian + blanco. El CTA principal en azul activo (#0A7EC2). Navegación en blanco al 50%.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Paleta del sitio — jerarquía de uso</div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;">
+                <div style="text-align:center;">
+                  <div style="height:40px;background:var(--frost);border-radius:6px;border:0.5px solid var(--border);margin-bottom:6px;"></div>
+                  <div style="font-size:10px;color:var(--ink-muted);">60% — Fondo</div>
+                  <div style="font-size:10px;font-family:monospace;color:var(--ink-faint);">#F2F8FD</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="height:40px;background:var(--night);border-radius:6px;margin-bottom:6px;"></div>
+                  <div style="font-size:10px;color:var(--ink-muted);">20% — Header/dark</div>
+                  <div style="font-size:10px;font-family:monospace;color:var(--ink-faint);">#0D2B4A</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="height:40px;background:var(--blue);border-radius:6px;margin-bottom:6px;"></div>
+                  <div style="font-size:10px;color:var(--ink-muted);">15% — Acciones</div>
+                  <div style="font-size:10px;font-family:monospace;color:var(--ink-faint);">#0A7EC2</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="height:40px;background:var(--cyan);border-radius:6px;margin-bottom:6px;"></div>
+                  <div style="font-size:10px;color:var(--ink-muted);">5% — Detalles</div>
+                  <div style="font-size:10px;font-family:monospace;color:var(--ink-faint);">#3EC6D4</div>
+                </div>
+              </div>
+              <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;">La proporción 60/20/15/5 mantiene el sitio legible y jerarquizado. El azul activo se reserva para CTAs y elementos interactivos — si se abusa, pierde su función de guía.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="documentos">
+          <div class="section-header">
+            <span class="section-num">12</span>
+            <h2 class="section-title">Documentos</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Encabezado de propuestas e informes</div>
+            <div class="card-body" style="padding:0;overflow:hidden;border-radius:0 0 10px 10px;">
+              <div class="doc-header">
+                <div class="doc-top">
+                  <div class="doc-wm">
+                    <em>Oliva</em><span>craft</span><b>·</b>
+                  </div>
+                  <div class="doc-meta-right">
+                    <p>Informe de auditoría UX</p>
+                    <p>Versión 1.0 — Enero 2025</p>
+                    <p>Confidencial</p>
+                  </div>
+                </div>
+                <div class="doc-body">
+                  <div class="doc-title">Diagnóstico de experiencia digital</div>
+                  <div class="doc-sub">Empresa cliente · Elaborado por Olivacraft · contacto@olivacraft.com</div>
+                </div>
+              </div>
+              <div style="padding:1rem 1.5rem;background:var(--surface);">
+                <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;">El encabezado usa fondo azul noche para el header y blanco frío para el cuerpo. Wordmark en versión cian + blanco. El título del documento en Fraunces 500.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Reglas de documentos</div>
+            <div class="card-body">
+              <div class="checklist">
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Siempre incluir el wordmark en el encabezado.</strong> Versión blanca (#FFF) sobre fondo noche, o versión estándar sobre fondo blanco.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Pie de página con olivacraft.com y el email.</strong> Todo documento debe tener trazabilidad de origen.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>El sello circular va en portada o esquina inferior derecha.</strong> Solo en documentos entregados al cliente, nunca en borradores internos.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>No usar más de dos fuentes en un documento.</strong> Fraunces para títulos, Plus Jakarta Sans para todo el cuerpo.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="email">
+          <div class="section-header">
+            <span class="section-num">13</span>
+            <h2 class="section-title">Email y firma</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Firma de email — formato aprobado</div>
+            <div class="card-body">
+              <div class="mockup-frame">
+                <div class="mock-label">Vista previa en cliente de email</div>
+                <div class="email-sig">
+                  <div class="sig-name">Francisco Orellana</div>
+                  <div class="sig-role">Product Designer · UX/UI</div>
+                  <div class="sig-divider"></div>
+                  <div class="sig-brand"><em>Oliva</em><span>craft</span><b>·</b></div>
+                  <div class="sig-web">
+                    <a href="#">olivacraft.com</a> &nbsp;·&nbsp;
+                    <a href="#">contacto@olivacraft.com</a> &nbsp;·&nbsp;
+                    <a href="#">LinkedIn</a>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:1rem;">
+                <div class="checklist">
+                  <div class="check-item">
+                    <div class="check-dot cd-must"></div>
+                    <div class="check-text"><strong>Nombre completo + cargo</strong> en Plus Jakarta Sans 500. Luego el wordmark de la marca como separador visual.</div>
+                  </div>
+                  <div class="check-item">
+                    <div class="check-dot cd-must"></div>
+                    <div class="check-text"><strong>Borde izquierdo en azul activo (#0A7EC2).</strong> Es el único elemento de color de la firma. No agregar logos ni banners adicionales.</div>
+                  </div>
+                  <div class="check-item">
+                    <div class="check-dot cd-never"></div>
+                    <div class="check-text"><strong>No incluir imágenes rasterizadas en la firma.</strong> Los logos como imágenes se bloquean en muchos clientes. Usar solo texto HTML.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Tono en emails</div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Apertura de email</div>
+                  <div style="background:var(--surface);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--ink);font-style:italic;line-height:1.6;">"Hola [nombre], te escribo para..."<br>"[nombre], revisé tu sitio y encontré..."</div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Cierre de email</div>
+                  <div style="background:var(--surface);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--ink);font-style:italic;line-height:1.6;">"Cualquier duda, me escribís."<br>"Quedo atento."</div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#8B1A1A;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Nunca usar</div>
+                  <div style="background:#FFFAFA;border-radius:8px;padding:10px 12px;font-size:13px;color:var(--ink-muted);font-style:italic;line-height:1.6;text-decoration:line-through;">"Estimado cliente..."<br>"Esperando su respuesta..."</div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;color:#8B1A1A;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Nunca usar</div>
+                  <div style="background:#FFFAFA;border-radius:8px;padding:10px 12px;font-size:13px;color:var(--ink-muted);font-style:italic;line-height:1.6;text-decoration:line-through;">"A quien corresponda..."<br>"Adjunto encontrará..."</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="social">
+          <div class="section-header">
+            <span class="section-num">14</span>
+            <h2 class="section-title">Redes sociales</h2>
+          </div>
+          <div class="card" style="margin-bottom:2px;">
+            <div class="card-head">Avatar — aplicación en LinkedIn, email y Slack</div>
+            <div class="card-body">
+              <div class="mockup-frame">
+                <div class="mock-label">Tamaños de avatar aprobados</div>
+                <div class="avatar-grid">
+                  <div class="av-item">
+                    <div class="av-circle" style="width:96px;height:96px;">
+                      <div class="av-inner">
+                        <div style="font-family:var(--font-display);font-size:21px;font-style:italic;color:var(--cyan);">Oliva</div>
+                        <div style="font-family:var(--font-display);font-size:24px;font-weight:600;color:#fff;letter-spacing:-0.03em;margin-top:-3px;">craft<span style="color:var(--cyan);">·</span></div>
+                      </div>
+                    </div>
+                    <span class="av-size">96px — LinkedIn</span>
+                  </div>
+                  <div class="av-item">
+                    <div class="av-circle" style="width:48px;height:48px;">
+                      <div class="av-inner">
+                        <div style="font-family:var(--font-display);font-size:10px;font-style:italic;color:var(--cyan);">Oliva</div>
+                        <div style="font-family:var(--font-display);font-size:12px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-top:-1px;">craft<span style="color:var(--cyan);">·</span></div>
+                      </div>
+                    </div>
+                    <span class="av-size">48px — Email</span>
+                  </div>
+                  <div class="av-item">
+                    <div class="av-circle" style="width:36px;height:36px;">
+                      <div class="av-inner">
+                        <div style="font-family:var(--font-display);font-size:7.5px;font-style:italic;color:var(--cyan);">Oliva</div>
+                        <div style="font-family:var(--font-display);font-size:9px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-top:-1px;">craft<span style="color:var(--cyan);">·</span></div>
+                      </div>
+                    </div>
+                    <span class="av-size">36px — Slack</span>
+                  </div>
+                </div>
+              </div>
+              <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin-top:1rem;">El avatar siempre usa fondo azul noche (#0D2B4A). "Oliva" en cian (#3EC6D4), "craft" y el punto en blanco y cian respectivamente. No usar el punto solo como avatar.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">Tono en LinkedIn y redes — principios</div>
+            <div class="card-body">
+              <div class="checklist">
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Posts basados en hallazgos reales.</strong> El criterio viene de la experiencia, no de artículos de terceros. Citar observaciones propias.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Primera persona siempre.</strong> "Encontré", "detecté", "en este caso". Nunca "los expertos dicen" o "según estudios".</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-must"></div>
+                  <div class="check-text"><strong>Un concepto por post.</strong> No intentar cubrir tres ideas en una publicación. Brevedad y foco.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>No usar hashtags genéricos masivos.</strong> #UX #diseño #emprendimiento. Si se usan hashtags, que sean específicos y relevantes.</div>
+                </div>
+                <div class="check-item">
+                  <div class="check-dot cd-never"></div>
+                  <div class="check-text"><strong>No publicar contenido motivacional genérico.</strong> Olivacraft no inspira — informa, demuestra y cuestiona.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div style="border-top:1px solid var(--border-mid);padding-top:2rem;margin-top:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div style="font-family:var(--font-display);font-size:16px;display:flex;align-items:baseline;">
+              <em style="font-style:italic;color:var(--blue);">Oliva</em><span style="font-weight:500;color:var(--night);">craft</span><span style="font-weight:700;color:var(--blue);font-size:18px;position:relative;top:-1px;margin-left:1px;">·</span>
+            </div>
+            <div style="font-size:11px;color:var(--ink-faint);margin-top:3px;">Brand Manual v1.0 · 2025 · Uso interno</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:var(--ink-muted);">contacto@olivacraft.com</div>
+            <div style="font-size:12px;color:var(--ink-faint);">olivacraft.com</div>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 
-  <!-- FASE 1 -->
-  <div class="phase phase-now" id="p1">
-    <div class="phase-header" onclick="tog('p1')">
-      <div class="ph-num">1</div>
-      <div class="ph-info">
-        <div class="ph-label">Fase 1 · Ahora mismo</div>
-        <div class="ph-title">Cimientos — identidad + correcciones críticas</div>
-      </div>
-      <div class="ph-time">Sem 1–3</div>
-      <div class="ph-toggle">▼</div>
-    </div>
-    <div class="phase-body">
-      <div class="identity-card">
-        <div class="ic-head">
-          <div class="ic-title">Identidad de marca</div>
-          <span class="ic-badge">Urgente · Tú ejecutas</span>
-        </div>
-        <div class="ic-desc">
-          Dirección validada: minimal tipográfico · cálida + premium · paleta nueva desde cero. El nombre porta la carga semántica: <em>Oliva</em> como concepto (equilibrio, presencia, sofisticación contenida) + <em>craft</em> (construcción guiada y acompañada).
-        </div>
-        <div class="ic-attrs">
-          <span class="ic-attr"><strong>Tipo:</strong> Wordmark puro</span>
-          <span class="ic-attr"><strong>Tono:</strong> Serif + Sans</span>
-          <span class="ic-attr"><strong>Paleta:</strong> Por definir — pendiente dirección cromática</span>
-          <span class="ic-attr"><strong>Entregable:</strong> Logo SVG + tokens de color</span>
-          <span class="ic-attr"><strong>Herramienta:</strong> Figma / Illustrator</span>
-        </div>
-      </div>
+  <script>
+    function switchView(viewId, btnElement) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
 
-      <div class="task-group">
-        <div class="tg-label">Correcciones críticas en código</div>
-        <div class="task">
-          <div class="task-dot d-critical"></div>
-          <div class="task-body">
-            <div class="task-title">Typo doble en sección de oferta: "evisión estuctural"</div>
-            <div class="task-desc">index.html ~línea 171. Daña credibilidad directamente en la zona de precios.</div>
-          </div>
-          <div class="task-tag t-critical">Crítico</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-critical"></div>
-          <div class="task-body">
-            <div class="task-title">Selector CSS roto en service switch</div>
-            <div class="task-desc">index.js ~L354: <code style="font-size:11px;background:#f0ede7;padding:1px 4px;border-radius:3px">[data-oferta-features</code> sin corchete de cierre. Feature 1 nunca se actualiza al cambiar servicio.</div>
-          </div>
-          <div class="task-tag t-critical">Crítico</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-critical"></div>
-          <div class="task-body">
-            <div class="task-title">404.html sin header ni footer</div>
-            <div class="task-desc">El usuario queda huérfano sin navegación de retorno al sitio principal.</div>
-          </div>
-          <div class="task-tag t-critical">Crítico</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-critical"></div>
-          <div class="task-body">
-            <div class="task-title">send.php ausente — formulario falla en silencio</div>
-            <div class="task-desc">Reemplazar con Web3Forms o Formspree. Sin backend los mensajes de contacto no llegan.</div>
-          </div>
-          <div class="task-tag t-critical">Crítico</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-critical"></div>
-          <div class="task-body">
-            <div class="task-title">data-contacto-time-text vacío en modo auditoría</div>
-            <div class="task-desc">El objeto <code style="font-size:11px;background:#f0ede7;padding:1px 4px;border-radius:3px">audit</code> en serviceContent no define timeText. El texto puede quedar en blanco al cargar.</div>
-          </div>
-          <div class="task-tag t-critical">Crítico</div>
-        </div>
-      </div>
+      document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active'));
+      const activeView = document.getElementById('view-' + viewId);
+      activeView.classList.add('active');
+      
+      window.scrollTo(0, 0);
+      
+      if(viewId === 'brand') {
+        updateActiveBrandLinks();
+      }
+    }
 
-      <div class="task-group">
-        <div class="tg-label">Infraestructura mínima</div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">Conectar formulario a backend real</div>
-            <div class="task-desc">Web3Forms (gratuito) o Formspree. Testear flujo completo incluyendo Cloudflare Turnstile.</div>
-          </div>
-          <div class="task-tag t-action">Urgente</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">Analytics: Google Analytics 4 o Plausible</div>
-            <div class="task-desc">Plausible recomendado: $9/mes, sin cookies, GDPR-safe. Necesario para medir desde el primer día de tráfico real.</div>
-          </div>
-          <div class="task-tag t-action">Urgente</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">Google Search Console + sitemap.xml + robots.txt</div>
-            <div class="task-desc">Sin estos archivos Google no indexa correctamente. Configurar antes de cualquier acción SEO.</div>
-          </div>
-          <div class="task-tag t-action">Urgente</div>
-        </div>
-      </div>
-    </div>
-  </div>
+    function tog(id) {
+      document.getElementById(id).classList.toggle('closed');
+    }
 
-  <!-- FASE 2 -->
-  <div class="phase" id="p2">
-    <div class="phase-header" onclick="tog('p2')">
-      <div class="ph-num">2</div>
-      <div class="ph-info">
-        <div class="ph-label">Fase 2 · Semanas 4–9</div>
-        <div class="ph-title">Tracción — primeros clientes reales</div>
-      </div>
-      <div class="ph-time">6 semanas</div>
-      <div class="ph-toggle">▼</div>
-    </div>
-    <div class="phase-body">
-      <div class="task-group">
-        <div class="tg-label">LinkedIn como canal principal (orgánico)</div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">2 posts semanales de fricción detectada</div>
-            <div class="task-desc">Tú defines el insight real. IA redacta, sugiere hooks y adapta el formato. Mayor ROI para B2B en LatAm sin presupuesto.</div>
-          </div>
-          <div class="task-tag t-action">Recurrente</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">1 post semanal de opinión / proceso</div>
-            <div class="task-desc">Posicionamiento como referente UX. Behind-the-scenes cada dos semanas para humanizar la marca.</div>
-          </div>
-          <div class="task-tag t-action">Recurrente</div>
-        </div>
-      </div>
-      <div class="task-group">
-        <div class="tg-label">Outreach directo a pymes</div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">20 pymes identificadas por semana (LinkedIn / Google Maps)</div>
-            <div class="task-desc">Mini-auditoría de 15 min por sitio con IA. Mensaje directo con 1 hallazgo gratuito. No vender en el primer contacto.</div>
-          </div>
-          <div class="task-tag t-action">Activo</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-action"></div>
-          <div class="task-body">
-            <div class="task-title">Tasa esperable: 2–4 respuestas por cada 20 mensajes</div>
-            <div class="task-desc">El cierre ocurre en la segunda interacción. El primer mensaje es para demostrar valor, no para vender.</div>
-          </div>
-          <div class="task-tag t-action">Proceso</div>
-        </div>
-      </div>
-      <div class="task-group">
-        <div class="tg-label">Portafolio público</div>
-        <div class="task">
-          <div class="task-dot d-build"></div>
-          <div class="task-body">
-            <div class="task-title">Actualizar portafolio con casos reales</div>
-            <div class="task-desc">Koyam, Rafcon y primer cliente. Estructura mínima por caso: problema → proceso → resultado medible.</div>
-          </div>
-          <div class="task-tag t-build">Antes del cliente</div>
-        </div>
-      </div>
-    </div>
-  </div>
+    const brandLinks = document.querySelectorAll('#view-brand .sb-link');
+    const brandSections = document.querySelectorAll('#view-brand .section, #view-brand .cover');
 
-  <!-- FASE 3 -->
-  <div class="phase closed" id="p3">
-    <div class="phase-header" onclick="tog('p3')">
-      <div class="ph-num">3</div>
-      <div class="ph-info">
-        <div class="ph-label">Fase 3 · Meses 3–5</div>
-        <div class="ph-title">Autoridad — que te encuentren sin buscarte</div>
-      </div>
-      <div class="ph-time">2–3 meses</div>
-      <div class="ph-toggle">▼</div>
-    </div>
-    <div class="phase-body">
-      <div class="task-group">
-        <div class="tg-label">SEO de contenido</div>
-        <div class="task">
-          <div class="task-dot d-build"></div>
-          <div class="task-body">
-            <div class="task-title">1 artículo semanal (500–900 palabras · IA + criterio propio)</div>
-            <div class="task-desc">Temas: errores UX comunes · cómo auditar X · por qué tu sitio no convierte. Agregar sección /blog o Notion como CMS temporal.</div>
-          </div>
-          <div class="task-tag t-build">Orgánico</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-build"></div>
-          <div class="task-body">
-            <div class="task-title">Keywords de alta intención en LatAm (baja competencia)</div>
-            <div class="task-desc">"auditoría UX pymes Chile" · "cómo saber si mi sitio pierde clientes" · "formulario de contacto no recibe mensajes"</div>
-          </div>
-          <div class="task-tag t-build">SEO</div>
-        </div>
-      </div>
-      <div class="task-group">
-        <div class="tg-label">Casos de estudio y testimonios</div>
-        <div class="task">
-          <div class="task-dot d-build"></div>
-          <div class="task-body">
-            <div class="task-title">1 caso documentado por cliente pagado. Sin excepción.</div>
-            <div class="task-desc">Contexto · hallazgo · solución · resultado. Con 3 casos el sitio empieza a vender solo sin outreach activo.</div>
-          </div>
-          <div class="task-tag t-build">Activo</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-build"></div>
-          <div class="task-body">
-            <div class="task-title">Sección de testimonios en el sitio</div>
-            <div class="task-desc">Ubicar entre Resultados y Contacto. Nombre, empresa, resultado concreto. Foto si es posible.</div>
-          </div>
-          <div class="task-tag t-build">Sitio web</div>
-        </div>
-      </div>
-    </div>
-  </div>
+    function updateActiveBrandLinks() {
+      if (!document.getElementById('view-brand').classList.contains('active')) return;
 
-  <!-- FASE 4 -->
-  <div class="phase closed" id="p4">
-    <div class="phase-header" onclick="tog('p4')">
-      <div class="ph-num">4</div>
-      <div class="ph-info">
-        <div class="ph-label">Fase 4 · Meses 5–8</div>
-        <div class="ph-title">Escala — volumen sin aumentar caos</div>
-      </div>
-      <div class="ph-time">2–3 meses</div>
-      <div class="ph-toggle">▼</div>
-    </div>
-    <div class="phase-body">
-      <div class="task-group">
-        <div class="tg-label">Sistematizar entrega de servicios</div>
-        <div class="task">
-          <div class="task-dot d-plan"></div>
-          <div class="task-body">
-            <div class="task-title">Plantilla reutilizable de informe de auditoría</div>
-            <div class="task-desc">Notion o Figma. Reduce tiempo de entrega por proyecto y mantiene calidad consistente.</div>
-          </div>
-          <div class="task-tag t-plan">Sistema</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-plan"></div>
-          <div class="task-body">
-            <div class="task-title">Formulario de briefing estandarizado para onboarding</div>
-            <div class="task-desc">Elimina idas y vueltas innecesarias al inicio de cada proyecto. Define alcance desde el día 1.</div>
-          </div>
-          <div class="task-tag t-plan">Sistema</div>
-        </div>
-      </div>
-      <div class="task-group">
-        <div class="tg-label">Revisión de precios (con casos + testimonios)</div>
-        <div class="task">
-          <div class="task-dot d-plan"></div>
-          <div class="task-body">
-            <div class="task-title">Estructura escalonada en tres tiers</div>
-            <div class="task-desc">Express $79–99K · Estándar $149–199K · Premium $290–390K CLP. El precio actual de $99K es de entrada — debe subir con evidencia.</div>
-          </div>
-          <div class="task-tag t-plan">Pricing</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-plan"></div>
-          <div class="task-body">
-            <div class="task-title">Segundo canal de adquisición</div>
-            <div class="task-desc">Opciones: Google Ads Search ($150–200 USD/mes mínimo) · Colaboraciones con agencias que no tienen UX interno · Newsletter propia.</div>
-          </div>
-          <div class="task-tag t-plan">Canal</div>
-        </div>
-      </div>
-    </div>
-  </div>
+      let currentSectionId = '';
+      brandSections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 120) {
+          currentSectionId = section.id;
+        }
+      });
 
-  <!-- FASE 5 -->
-  <div class="phase closed" id="p5">
-    <div class="phase-header" onclick="tog('p5')">
-      <div class="ph-num">5</div>
-      <div class="ph-info">
-        <div class="ph-label">Fase 5 · Mes 8+</div>
-        <div class="ph-title">Sistema — demanda sin intervención constante</div>
-      </div>
-      <div class="ph-time">Ongoing</div>
-      <div class="ph-toggle">▼</div>
-    </div>
-    <div class="phase-body">
-      <div class="task-group">
-        <div class="tg-label">Estado objetivo del negocio</div>
-        <div class="task">
-          <div class="task-dot d-plan"></div>
-          <div class="task-body">
-            <div class="task-title">SEO generando tráfico pasivo semanal constante</div>
-            <div class="task-desc">Casos de estudio cerrando clientes sin pitch activo. El sitio trabaja solo.</div>
-          </div>
-          <div class="task-tag t-plan">Meta</div>
-        </div>
-        <div class="task">
-          <div class="task-dot d-plan"></div>
-          <div class="task-body">
-            <div class="task-title">Agenda con 2–3 semanas de anticipación</div>
-            <div class="task-desc">Punto de decisión estratégica: mantener como estudio personal o escalar con colaboradores externos.</div>
-          </div>
-          <div class="task-tag t-plan">Meta</div>
-        </div>
-      </div>
-    </div>
-  </div>
+      brandLinks.forEach(link => {
+        const href = link.getAttribute('href').replace('#', '');
+        link.classList.toggle('active', href === currentSectionId);
+      });
+    }
 
-  <!-- Metrics -->
-  <div class="metrics">
-    <div class="metric">
-      <div class="metric-n">5</div>
-      <div class="metric-l">fases estructuradas</div>
-    </div>
-    <div class="metric">
-      <div class="metric-n">6–9</div>
-      <div class="metric-l">meses a sistema autónomo</div>
-    </div>
-    <div class="metric">
-      <div class="metric-n">1+IA</div>
-      <div class="metric-l">ritmo sostenible</div>
-    </div>
-  </div>
-
-  <!-- Legend -->
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot d-critical"></div> Bug crítico</div>
-    <div class="legend-item"><div class="legend-dot d-action"></div> Acción activa</div>
-    <div class="legend-item"><div class="legend-dot d-build"></div> Construcción</div>
-    <div class="legend-item"><div class="legend-dot d-plan"></div> Planificación futura</div>
-  </div>
-
-</div>
-
-<script>
-function tog(id) {
-  document.getElementById(id).classList.toggle('closed');
-}
-</script>
+    window.addEventListener('scroll', updateActiveBrandLinks, { passive: true });
+  </script>
 </body>
 </html>
